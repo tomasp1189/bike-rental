@@ -56,24 +56,35 @@ Alternatively, you can deploy using our template by clicking on the Deploy butto
 
 ## What now?
 
-### Basic boilerplate
-
-- [ ] Client (Nextjs/React)
-  - [ ]
-- [ ] Custom Server (Node js)
-  - [x] express routing
-  - [x] mongodb + Mongoose
-  - [ ] Authentication email + password and JWT
-  - [ ] Centralized Error Handling
-
-### Problem Requirements
-
-- [ ] User (AuthO)
-- [ ] Bikes
-  - [ ] Model (has reviews)
-  - [ ] Controller
-  - [ ] Routes
-- [ ] Reservations
-  - [ ] Model (can be cancelled)
-  - [ ] Controller
-  - [ ] Routes
+- [ ] BackEnd
+  - [ ] Setup Auth0
+    - [x] Initial Setup + SDK integration
+    - [ ] Add Roles and rule to attach roles
+    - [ ] Create Role validating middleware
+  - [x] Setup DB
+  - [ ] Bike
+    - [x] CRUD
+    - [ ] Search with filters + reservation dates
+  - [ ] Reservations
+    - [ ] CRUD
+    - [ ] Cancellation with isOwner validation
+  - [ ] Reviews
+    - [ ] CRUD
+    - [ ] Creation with isOwner of reservation validation
+  - [x] Centralized Error Handling
+  - [x] Postman integration
+- [ ] FrontEnd
+  - [ ] Material UI
+  - [ ] Auth
+    - [x] Sign Up + Login
+    - [ ] Route limitation by authentication and role validation
+  - [ ] User Views
+    - [ ] Bike List
+    - [ ] Reservation Form
+    - [ ] Reservation Cancellation
+    - [ ] Review Form
+  - [ ] Admin Views
+    - [ ] User list
+    - [ ] User Create form
+    - [ ] User Update form
+    - [ ] Bike list
