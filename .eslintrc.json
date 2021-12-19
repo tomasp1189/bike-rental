@@ -8,6 +8,7 @@
       { "namedComponents": "arrow-function" }
     ],
     "react/jsx-one-expression-per-line": "off",
-    "arrow-parens": ["error", "as-needed"]
+    "arrow-parens": ["error", "as-needed"],
+    "eslint implicit-arrow-linebreak": "below"
   }
 }

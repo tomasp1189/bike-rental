@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import notFoundPlugin from '../lib/notFoundPlugin';
 
 const AddressSchema = mongoose.Schema({
   city: String,
@@ -59,5 +60,7 @@ const BikeSchema = new mongoose.Schema(
   },
   { timestamps: true },
 );
+
+BikeSchema.plugin(notFoundPlugin);
 
 export default mongoose.models.Bike || mongoose.model('Bike', BikeSchema);

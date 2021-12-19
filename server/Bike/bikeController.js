@@ -8,47 +8,50 @@ const create = async (req, res) => {
     ); /* create a new model in the database */
     res.status(201).json({ success: true, data: bike });
   } catch (error) {
-    res.status(400).json({ success: false, error });
+    throw error;
   }
 };
 const read = async (req, res) => {
   try {
     console.log('read', req.query.id);
     const bike = await Bike.findById(req.query.id);
-    if (!bike) {
-      return res.status(404).json({ success: false });
-    }
+    // if (!bike) {
+    //   return res.status(404).json({ success: false });
+    // }
     return res.status(200).json({ success: true, data: bike });
   } catch (error) {
     // not found 404
-    return res.status(400).json({ success: false });
+    // return res.status(400).json({ success: false });
+    throw error;
   }
 };
 const update = async (req, res) => {
   try {
-    const pet = await Bike.findByIdAndUpdate(req.query.id, req.body, {
+    const bike = await Bike.findByIdAndUpdate(req.query.id, req.body, {
       new: true,
       runValidators: true,
     });
-    if (!pet) {
-      return res.status(400).json({ success: false });
-    }
-    return res.status(200).json({ success: true, data: pet });
+    // if (!bike) {
+    //   return res.status(400).json({ success: false });
+    // }
+    return res.status(200).json({ success: true, data: bike });
   } catch (error) {
-    // not found 404
-    return res.status(400).json({ success: false });
+    // // not found 404
+    // return res.status(400).json({ success: false });
+    throw error;
   }
 };
-const deletePet = async (req, res) => {
+const deleteBike = async (req, res) => {
   try {
-    const deletedPet = await Bike.deleteOne({ _id: req.query.id });
-    if (!deletedPet) {
+    const deletedBike = await Bike.deleteOne({ _id: req.query.id });
+    if (!deletedBike) {
       return res.status(400).json({ success: false });
     }
     return res.status(200).json({ success: true, data: {} });
   } catch (error) {
     // not found 404
-    return res.status(400).json({ success: false });
+    // return res.status(400).json({ success: false });
+    throw error;
   }
 };
 const all = async (req, res) => {
@@ -56,7 +59,8 @@ const all = async (req, res) => {
     const bikes = await Bike.find({}); /* find all the data in our database */
     return res.status(200).json({ success: true, data: bikes });
   } catch (error) {
-    return res.status(400).json({ success: false });
+    // return res.status(400).json({ success: false });
+    throw error;
   }
 };
 
@@ -64,6 +68,6 @@ export default {
   create,
   read,
   update,
-  deletePet,
+  deleteBike,
   all,
 };

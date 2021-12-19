@@ -17,52 +17,65 @@
  *  - passed incorrect parameters in a function
  */
 
- function logError (err) {
-  console.error(err)
- }
- 
- function logErrorMiddleware (err, req, res, next) {
-  logError(err)
-  next(err)
- }
- 
- function returnError (err, req, res, next) {
-  res.status(err.statusCode || 500).send(err.message)
- }
- 
- function isOperationalError(error) {
-  if (error instanceof BaseError) {
-  return error.isOperational
-  }
-  return false
- }
- 
- module.exports = {
-  logError,
-  logErrorMiddleware,
-  returnError,
-  isOperationalError
- }
+// function logError(err) {
+//   console.error(err);
+// }
 
-function errorHandler(err, res) {
-  console.log(error);
+// function logErrorMiddleware(err, req, res, next) {
+//   logError(err);
+//   next(err);
+// }
 
-  if (typeof err === 'string') {
-    // custom application error
-    return res.status(400).json({ message: err });
-  }
+// function returnError(err, req, res, next) {
+//   res.status(err.statusCode || 500).send(err.message);
+// }
 
-  if (err.name === 'UnauthorizedError') {
-    // jwt authentication error
-    return res.status(401).json({ message: 'Invalid Token' });
-  }
-  if (err.name === 'NotFound') {
-    // jwt authentication error
-    return res.status(404).json({ message: err });
-  }
+// function isOperationalError(error) {
+//   if (error instanceof BaseError) {
+//     return error.isOperational;
+//   }
+//   return false;
+// }
 
-  // default to 500 server error
-  return res.status(500).json({ message: err.message });
+// module.exports = {
+//   logError,
+//   logErrorMiddleware,
+//   returnError,
+//   isOperationalError,
+// };
+
+// import nc from 'next-connect';
+
+// const errorHandler = () =>
+//   nc({
+//     onError: (err, req, res) => {
+//       console.error(err.stack);
+//       res.status(500).end('Server Error');
+//     },
+//     onNoMatch: (req, res) => {
+//       res.status(404).end('Not found');
+//     },
+//   });
+
+// export default errorHandler;
+
+export default function errorHandler(handler) {
+  return async (req, res) => {
+    try {
+      return await handler(req, res);
+    } catch (err) {
+      console.error(err.name, err);
+      switch (err.name) {
+        case 'ValidationError':
+          return res.status(400).json({ message: err });
+        case 'UnauthorizedError':
+          return res.status(401).json({ message: 'Unauthorized request' });
+        case 'NotFound':
+          return res.status(404).json({ message: err });
+
+        default:
+          return res.status(500).json({ message: err.message });
+      }
+    }
+  };
 }
-
-export { errorHandler };
