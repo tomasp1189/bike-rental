@@ -1,63 +1,4 @@
-/**
- * Operational Errors
- * - failed to connect to server
- * - failed to resolve hostname
- * - invalid user input
- * - request timeout
- * - server returned a 500 response
- * - socket hang-up
- * - system is out of memory
- *
- * Programmer Errors
- *  - called an asynchronous function without a callback
- *  - did not resolve a promise
- *  - did not catch a rejected promise
- *  - passed a string where an object was expected
- *  - passed an object where a string was expected
- *  - passed incorrect parameters in a function
- */
-
-// function logError(err) {
-//   console.error(err);
-// }
-
-// function logErrorMiddleware(err, req, res, next) {
-//   logError(err);
-//   next(err);
-// }
-
-// function returnError(err, req, res, next) {
-//   res.status(err.statusCode || 500).send(err.message);
-// }
-
-// function isOperationalError(error) {
-//   if (error instanceof BaseError) {
-//     return error.isOperational;
-//   }
-//   return false;
-// }
-
-// module.exports = {
-//   logError,
-//   logErrorMiddleware,
-//   returnError,
-//   isOperationalError,
-// };
-
-// import nc from 'next-connect';
-
-// const errorHandler = () =>
-//   nc({
-//     onError: (err, req, res) => {
-//       console.error(err.stack);
-//       res.status(500).end('Server Error');
-//     },
-//     onNoMatch: (req, res) => {
-//       res.status(404).end('Not found');
-//     },
-//   });
-
-// export default errorHandler;
+import { errorNames, httpStatusCodes } from './httpStatusCodes';
 
 export default function errorHandler(handler) {
   return async (req, res) => {
@@ -66,15 +7,24 @@ export default function errorHandler(handler) {
     } catch (err) {
       console.error(err.name, err);
       switch (err.name) {
-        case 'ValidationError':
-          return res.status(400).json({ message: err });
-        case 'UnauthorizedError':
-          return res.status(401).json({ message: 'Unauthorized request' });
-        case 'NotFound':
-          return res.status(404).json({ message: err });
-
+        case errorNames.VALIDATION_ERROR:
+        case errorNames.BAD_REQUEST:
+          return res.status(httpStatusCodes.BAD_REQUEST).json({ message: err });
+        case errorNames.UNAUTHORIZED_ERROR:
+          return res
+            .status(httpStatusCodes.UNAUTHORIZED)
+            .json({ message: err.message || 'Unauthorized request' });
+        case errorNames.FORBIDDEN:
+          return res
+            .status(httpStatusCodes.FORBIDDEN)
+            .json({ message: err.message || 'Forbidden request' });
+        case errorNames.NOT_FOUND:
+          return res.status(httpStatusCodes.NOT_FOUND).json({ message: err });
+        case errorNames.INTERNAL_SERVER:
         default:
-          return res.status(500).json({ message: err.message });
+          return res
+            .status(httpStatusCodes.INTERNAL_SERVER)
+            .json({ message: err.message });
       }
     }
   };

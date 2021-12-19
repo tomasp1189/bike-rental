@@ -1,57 +1,30 @@
-import mongoose from 'mongoose';
+import mongoose, { Schema } from 'mongoose';
+import notFoundPlugin from '../lib/notFoundPlugin';
 
-/* PetSchema will correspond to a collection in your MongoDB database. */
-const PetSchema = new mongoose.Schema({
-  name: {
-    /* The name of this pet */
-
+/* ReservationSchema will correspond to a collection in your MongoDB database. */
+const ReservationSchema = new mongoose.Schema({
+  bike: {
+    /* The bike being reserved */
+    type: Schema.Types.ObjectId,
+    ref: 'Bike',
+    required: true,
+  },
+  owner_id: {
+    /* The owner of this reservation
+     session.user.sub */
     type: String,
-    required: [true, 'Please provide a name for this pet.'],
-    maxlength: [20, 'Name cannot be more than 60 characters']
+    required: true,
   },
-  ownerId: {
-    /* The owner of this reservation */
-    type: string,
-    required: true
+  from: { type: Date, required: true },
+  to: { type: Date, required: true },
+  is_cancelled: {
+    type: Boolean,
+    default: false,
   },
-  species: {
-    /* The species of your pet */
-
-    type: String,
-    required: [true, 'Please specify the species of your pet.'],
-    maxlength: [30, 'Species specified cannot be more than 40 characters']
-  },
-  age: {
-    /* Pet's age, if applicable */
-
-    type: Number
-  },
-  poddy_trained: {
-    /* Boolean poddy_trained value, if applicable */
-
-    type: Boolean
-  },
-  diet: {
-    /* List of dietary needs, if applicable */
-
-    type: Array
-  },
-  image_url: {
-    /* Url to pet image */
-
-    required: [true, 'Please provide an image url for this pet.'],
-    type: String
-  },
-  likes: {
-    /* List of things your pet likes to do */
-
-    type: Array
-  },
-  dislikes: {
-    /* List of things your pet does not like to do */
-
-    type: Array
-  }
 });
 
-export default mongoose.models.Pet || mongoose.model('Pet', PetSchema);
+ReservationSchema.plugin(notFoundPlugin);
+
+export default mongoose.models.Reservation ||
+  mongoose.model('Reservation', ReservationSchema);
+// errors are handled in errorHandler middleware. No need for try/catch blocks
