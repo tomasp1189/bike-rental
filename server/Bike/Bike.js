@@ -21,7 +21,7 @@ const ReviewSchema = mongoose.Schema({
     max: 5,
   },
   // since I am using auth0 I will only store userIds
-  ownerId: {
+  owner_id: {
     type: String,
     required: true,
   },
@@ -56,11 +56,25 @@ const BikeSchema = new mongoose.Schema(
       /* Pet's age, if applicable */
       type: [ReviewSchema],
     },
+    average_rating: {
+      type: Number,
+      default: 0,
+    },
     // latestReviews: { type: [ReviewSchema], default: [] }
   },
   { timestamps: true },
 );
 
+BikeSchema.pre(['updateOne', 'findOneAndUpdate'], next => {
+  // const docToUpdate = await this.model.findOne(this.getQuery());
+  if (!this.reviews || this.reviews.length === 0) next();
+  const totalRatings = this.reviews.reduce(
+    (accu, review) => accu + review.rate,
+    0,
+  );
+  const averageRating = totalRatings / this.reviews.slength;
+  this.average_rating = averageRating;
+});
 BikeSchema.plugin(notFoundPlugin);
 
 export default mongoose.models.Bike || mongoose.model('Bike', BikeSchema);

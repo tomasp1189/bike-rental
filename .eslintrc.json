@@ -9,6 +9,7 @@
     ],
     "react/jsx-one-expression-per-line": "off",
     "arrow-parens": ["error", "as-needed"],
-    "eslint implicit-arrow-linebreak": "below"
+    "implicit-arrow-linebreak": "off",
+    "operator-linebreak": ["error", "after"]
   }
 }
