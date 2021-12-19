@@ -1,7 +1,9 @@
+import { withApiAuthRequired } from '@auth0/nextjs-auth0';
 import dbConnect from '../../../lib/dbConnect';
+import isManager from '../../../server/Auth/isManagerMiddleware';
 import bikeController from '../../../server/Bike/bikeController';
 
-export default async function handler(req, res) {
+export default withApiAuthRequired(async (req, res) => {
   const { method } = req;
 
   await dbConnect();
@@ -10,8 +12,8 @@ export default async function handler(req, res) {
     case 'GET':
       return bikeController.all(req, res);
     case 'POST':
-      return bikeController.create(req, res);
+      return isManager(bikeController.create)(req, res);
     default:
       return res.status(400).json({ success: false });
   }
-}
+});

@@ -1,26 +1,26 @@
+// import { withApiAuthRequired } from '@auth0/nextjs-auth0';
+import { withApiAuthRequired } from '@auth0/nextjs-auth0';
 import dbConnect from '../../../lib/dbConnect';
+import isManager from '../../../server/Auth/isManagerMiddleware';
 import bikeController from '../../../server/Bike/bikeController';
 
-export default async function handler(req, res) {
+export default withApiAuthRequired(async (req, res) => {
+  // export default async (req, res) => {s
   await dbConnect();
 
-  const {
-    query: { id },
-    method,
-  } = req;
-  console.log(method, req.query);
+  const { method } = req;
   switch (method) {
     /* Get a model by its ID */
     case 'GET':
       return bikeController.read(req, res);
     /* Edit a model by its ID */
     case 'PUT':
-      return bikeController.update(req, res);
+      return isManager(bikeController.update)(req, res);
     /* Delete a model by its ID */
     case 'DELETE':
-      return bikeController.deletePet(req, res);
+      return isManager(bikeController.deletePet)(req, res);
 
     default:
       return res.status(400).json({ success: false });
   }
-}
+});
