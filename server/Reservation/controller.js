@@ -1,14 +1,40 @@
 import { getSession } from '@auth0/nextjs-auth0';
-import { httpStatusCodes } from '../errors/httpStatusCodes';
+import AppError from '../errors/AppError';
+import { errorNames, httpStatusCodes } from '../errors/httpStatusCodes';
 import Reservation from './Reservation';
 
 // errors are handled in errorHandler middleware. No need for try/catch blocks
 
 const create = async (req, res) => {
   const { user } = getSession(req);
+  const dateOverlapQuery = date => ({
+    startDate: { $lte: date },
+    endDate: { $gte: date },
+  });
+
+  const datesQuery = {
+    $or: [
+      {
+        $and: [
+          dateOverlapQuery(req.body?.startDate),
+          dateOverlapQuery(req.body?.endDate),
+        ],
+      },
+    ],
+  };
+  const docs = await Reservation.find({
+    $and: [{ bike: req.body?.bike }, datesQuery],
+  });
+
+  if (docs.length > 0)
+    throw new AppError(
+      'Bike is not available for Reservation on chosen dates.',
+      errorNames.CONFLICT,
+    );
+
   const reservation = await Reservation.create({
     ...req.body,
-    owner_id: user.sub,
+    ownerId: user.sub,
   }); /* create a new model in the database */
   res
     .status(httpStatusCodes.CREATED)

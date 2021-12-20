@@ -1,4 +1,6 @@
 import mongoose, { Schema } from 'mongoose';
+import AppError from '../errors/AppError';
+import { errorNames } from '../errors/httpStatusCodes';
 import notFoundPlugin from '../lib/notFoundPlugin';
 
 /* ReservationSchema will correspond to a collection in your MongoDB database. */
@@ -9,21 +11,34 @@ const ReservationSchema = new mongoose.Schema({
     ref: 'Bike',
     required: true,
   },
-  owner_id: {
+  ownerId: {
     /* The owner of this reservation
      session.user.sub */
     type: String,
     required: true,
   },
-  from: { type: Date, required: true },
-  to: { type: Date, required: true },
-  is_cancelled: {
+  startDate: { type: Date, required: true },
+  endDate: { type: Date, required: true },
+  isCancelled: {
     type: Boolean,
     default: false,
   },
 });
 
 ReservationSchema.plugin(notFoundPlugin);
+ReservationSchema.pre('validate', function dateValidation(next) {
+  // if (err) next(err);
+  const start = new Date(this?.startDate);
+  const end = new Date(this?.endDate);
+  if (start.getTime() > end.getTime())
+    next(
+      new AppError(
+        'End Date must be greater than Start Date',
+        errorNames.VALIDATION_ERROR,
+      ),
+    );
+  else next();
+});
 
 export default mongoose.models.Reservation ||
   mongoose.model('Reservation', ReservationSchema);
