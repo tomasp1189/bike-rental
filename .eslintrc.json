@@ -10,6 +10,8 @@
     "react/jsx-one-expression-per-line": "off",
     "arrow-parens": ["error", "as-needed"],
     "implicit-arrow-linebreak": "off",
-    "operator-linebreak": ["error", "after"]
+    "operator-linebreak": "off",
+    "nonblock-statement-body-position": "off",
+    "curly": "off"
   }
 }
