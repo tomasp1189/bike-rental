@@ -1,8 +1,9 @@
 import { getSession } from '@auth0/nextjs-auth0';
 
-import dbConnect from '../../lib/dbConnect';
-import { errorNames } from '../errors/httpStatusCodes';
-import Reservation from '../Reservation/Reservation';
+import AppError from '../../errors/AppError';
+import { errorNames } from '../../errors/httpStatusCodes';
+import Reservation from '../../Reservation/Reservation';
+import dbConnect from '../../../lib/dbConnect';
 
 export default function ownsRecord(handler) {
   return async (req, res) => {
@@ -12,11 +13,12 @@ export default function ownsRecord(handler) {
 
     const existingRecord = await Reservation.findById(req.query.id);
 
-    if (existingRecord.owner_id !== user.sub) {
-      const err = new Error('User does not own this reservation');
-      err.name = errorNames.FORBIDDEN;
-      throw err;
-    }
+    if (existingRecord.ownerId !== user.sub)
+      throw new AppError(
+        'User does not own this reservation',
+        errorNames.FORBIDDEN,
+      );
+
     console.log('user', user['http://localhost:3000/roles'], user);
 
     // if (user.roles !== 'Manager') {
