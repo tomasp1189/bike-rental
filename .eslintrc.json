@@ -8,6 +8,7 @@
       { "namedComponents": "arrow-function" }
     ],
     "react/jsx-one-expression-per-line": "off",
+    "react/no-array-index-key": 1,
     "arrow-parens": ["error", "as-needed"],
     "implicit-arrow-linebreak": "off",
     "operator-linebreak": "off",

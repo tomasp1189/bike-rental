@@ -1,12 +1,12 @@
-import { useState } from 'react'
-import { useRouter } from 'next/router'
-import { mutate } from 'swr'
+import React, { useState } from 'react';
+import { useRouter } from 'next/router';
+import { mutate } from 'swr';
 
 const Form = ({ formId, petForm, forNewPet = true }) => {
-  const router = useRouter()
-  const contentType = 'application/json'
-  const [errors, setErrors] = useState({})
-  const [message, setMessage] = useState('')
+  const router = useRouter();
+  const contentType = 'application/json';
+  const [errors, setErrors] = useState({});
+  const [message, setMessage] = useState('');
 
   const [form, setForm] = useState({
     name: petForm.name,
@@ -18,11 +18,11 @@ const Form = ({ formId, petForm, forNewPet = true }) => {
     image_url: petForm.image_url,
     likes: petForm.likes,
     dislikes: petForm.dislikes,
-  })
+  });
 
   /* The PUT method edits an existing entry in the mongodb database. */
-  const putData = async (form) => {
-    const { id } = router.query
+  const putData = async form => {
+    const { id } = router.query;
 
     try {
       const res = await fetch(`/api/pets/${id}`, {
@@ -32,24 +32,24 @@ const Form = ({ formId, petForm, forNewPet = true }) => {
           'Content-Type': contentType,
         },
         body: JSON.stringify(form),
-      })
+      });
 
       // Throw error with status code in case Fetch API req failed
       if (!res.ok) {
-        throw new Error(res.status)
+        throw new Error(res.status);
       }
 
-      const { data } = await res.json()
+      const { data } = await res.json();
 
-      mutate(`/api/pets/${id}`, data, false) // Update the local data without a revalidation
-      router.push('/')
+      mutate(`/api/pets/${id}`, data, false); // Update the local data without a revalidation
+      router.push('/');
     } catch (error) {
-      setMessage('Failed to update pet')
+      setMessage('Failed to update pet');
     }
-  }
+  };
 
   /* The POST method adds a new entry in the mongodb database. */
-  const postData = async (form) => {
+  const postData = async form => {
     try {
       const res = await fetch('/api/pets', {
         method: 'POST',
@@ -58,50 +58,50 @@ const Form = ({ formId, petForm, forNewPet = true }) => {
           'Content-Type': contentType,
         },
         body: JSON.stringify(form),
-      })
+      });
 
       // Throw error with status code in case Fetch API req failed
       if (!res.ok) {
-        throw new Error(res.status)
+        throw new Error(res.status);
       }
 
-      router.push('/')
+      router.push('/');
     } catch (error) {
-      setMessage('Failed to add pet')
+      setMessage('Failed to add pet');
     }
-  }
+  };
 
-  const handleChange = (e) => {
-    const target = e.target
+  const handleChange = e => {
+    const { target } = e;
     const value =
-      target.name === 'poddy_trained' ? target.checked : target.value
-    const name = target.name
+      target.name === 'poddy_trained' ? target.checked : target.value;
+    const { name } = target;
 
     setForm({
       ...form,
       [name]: value,
-    })
-  }
+    });
+  };
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    const errs = formValidate()
+  const handleSubmit = e => {
+    e.preventDefault();
+    const errs = formValidate();
     if (Object.keys(errs).length === 0) {
-      forNewPet ? postData(form) : putData(form)
+      forNewPet ? postData(form) : putData(form);
     } else {
-      setErrors({ errs })
+      setErrors({ errs });
     }
-  }
+  };
 
-  /* Makes sure pet info is filled for pet name, owner name, species, and image url*/
+  /* Makes sure pet info is filled for pet name, owner name, species, and image url */
   const formValidate = () => {
-    let err = {}
-    if (!form.name) err.name = 'Name is required'
-    if (!form.owner_name) err.owner_name = 'Owner is required'
-    if (!form.species) err.species = 'Species is required'
-    if (!form.image_url) err.image_url = 'Image URL is required'
-    return err
-  }
+    const err = {};
+    if (!form.name) err.name = 'Name is required';
+    if (!form.owner_name) err.owner_name = 'Owner is required';
+    if (!form.species) err.species = 'Species is required';
+    if (!form.image_url) err.image_url = 'Image URL is required';
+    return err;
+  };
 
   return (
     <>
@@ -160,30 +160,37 @@ const Form = ({ formId, petForm, forNewPet = true }) => {
           onChange={handleChange}
         />
 
-        <label htmlFor="image_url">Image URL</label>
-        <input
-          type="url"
-          name="image_url"
-          value={form.image_url}
-          onChange={handleChange}
-          required
-        />
+        <label htmlFor="image_url">
+          Image URL
+          <input
+            type="url"
+            name="image_url"
+            id="image_url"
+            value={form.image_url}
+            onChange={handleChange}
+            required
+          />
+        </label>
 
-        <label htmlFor="likes">Likes</label>
-        <textarea
-          name="likes"
-          maxLength="60"
-          value={form.likes}
-          onChange={handleChange}
-        />
+        <label htmlFor="likes">
+          Likes
+          <textarea
+            name="likes"
+            maxLength="60"
+            value={form.likes}
+            onChange={handleChange}
+          />
+        </label>
 
-        <label htmlFor="dislikes">Dislikes</label>
-        <textarea
-          name="dislikes"
-          maxLength="60"
-          value={form.dislikes}
-          onChange={handleChange}
-        />
+        <label htmlFor="dislikes">
+          Dislikes
+          <textarea
+            name="dislikes"
+            maxLength="60"
+            value={form.dislikes}
+            onChange={handleChange}
+          />
+        </label>
 
         <button type="submit" className="btn">
           Submit
@@ -196,7 +203,7 @@ const Form = ({ formId, petForm, forNewPet = true }) => {
         ))}
       </div>
     </>
-  )
-}
+  );
+};
 
-export default Form
+export default Form;

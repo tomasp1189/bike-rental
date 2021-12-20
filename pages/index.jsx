@@ -2,9 +2,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Link from 'next/link';
-import Image from 'next/image';
 
-import dbConnect from '../lib/dbConnect';
+import dbConnect from '../server/lib/dbConnect';
 import Bike from '../server/Bike/Bike';
 
 const Index = ({ bikes = [] }) => (
