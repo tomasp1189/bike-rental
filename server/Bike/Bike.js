@@ -8,12 +8,6 @@ const AddressSchema = mongoose.Schema({
   coords: [Number],
 });
 const ReviewSchema = mongoose.Schema({
-  comment: {
-    type: String,
-    required: true,
-    minlength: 100,
-    maxlength: 250,
-  },
   rate: {
     type: Number,
     required: true,
@@ -21,7 +15,7 @@ const ReviewSchema = mongoose.Schema({
     max: 5,
   },
   // since I am using auth0 I will only store userIds
-  owner_id: {
+  ownerId: {
     type: String,
     required: true,
   },
@@ -56,7 +50,7 @@ const BikeSchema = new mongoose.Schema(
       /* Pet's age, if applicable */
       type: [ReviewSchema],
     },
-    average_rating: {
+    averageRating: {
       type: Number,
       default: 0,
     },
@@ -65,16 +59,34 @@ const BikeSchema = new mongoose.Schema(
   { timestamps: true },
 );
 
-BikeSchema.pre(['updateOne', 'findOneAndUpdate'], next => {
-  // const docToUpdate = await this.model.findOne(this.getQuery());
-  if (!this.reviews || this.reviews.length === 0) next();
-  const totalRatings = this.reviews.reduce(
-    (accu, review) => accu + review.rate,
-    0,
-  );
-  const averageRating = totalRatings / this.reviews.slength;
-  this.average_rating = averageRating;
-});
+BikeSchema.pre(
+  ['updateOne', 'findOneAndUpdate', 'findByIdAndUpdate'],
+  async function updateAverageRating(next) {
+    const currentReview = this.getUpdate().$push.reviews;
+    const docToUpdate = await this.model.findOne(this.getQuery());
+    console.log('updateAverageRating', currentReview);
+    // const docToUpdate = await this.model.findOne(this.getQuery());
+    if (
+      !docToUpdate ||
+      !docToUpdate.reviews ||
+      docToUpdate.reviews.length === 0
+    )
+      next();
+
+    const totalRatings =
+      docToUpdate.reviews.reduce((accu, review) => accu + review.rate, 0) +
+      currentReview.rate;
+
+    // if this si the first review, we make the rate the average rating
+    const averageRating = Number.isNaN(docToUpdate?.reviews.length)
+      ? currentReview.rate
+      : totalRatings / (docToUpdate.reviews.length + 1);
+
+    this.getUpdate().$set.averageRating = averageRating;
+
+    next();
+  },
+);
 BikeSchema.plugin(notFoundPlugin);
 
 export default mongoose.models.Bike || mongoose.model('Bike', BikeSchema);

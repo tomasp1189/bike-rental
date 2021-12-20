@@ -1,3 +1,4 @@
+import { getSession } from '@auth0/nextjs-auth0';
 import { httpStatusCodes } from '../errors/httpStatusCodes';
 import Bike from './Bike';
 
@@ -35,6 +36,30 @@ const all = async (req, res) => {
   const bikes = await Bike.find({}); /* find all the data in our database */
   return res.status(httpStatusCodes.OK).json({ success: true, data: bikes });
 };
+const review = async (req, res) => {
+  const { user } = getSession(req);
+  console.log('review', req.body);
+  const bike = await Bike.findByIdAndUpdate(
+    req.query.id,
+    {
+      $push: {
+        reviews: {
+          ...req.body.review,
+          ownerId: user.sub,
+        },
+      },
+    },
+    {
+      new: true,
+      runValidators: true,
+    },
+  );
+  // if (!bike) {
+  //   return res.status(400).json({ success: false });
+  // }
+  console.log('review', bike);
+  return res.status(httpStatusCodes.OK).json({ success: true, data: bike });
+};
 
 export default {
   create,
@@ -42,4 +67,5 @@ export default {
   update,
   deleteBike,
   all,
+  review,
 };
