@@ -1,34 +1,37 @@
-import '../css/style.css';
-import '../css/form.css';
+import React from 'react';
+import PropTypes from 'prop-types';
 import Head from 'next/head';
-import Link from 'next/link';
+import { CssBaseline, ThemeProvider } from '@mui/material';
+import { UserProvider } from '@auth0/nextjs-auth0';
+
+import theme from '../styles/theme';
+import Layout from '../components/organisms/Layout';
 
 const MyApp = ({ Component, pageProps }) => (
   <>
     <Head>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+      />
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      />
       <title>Pet Care App</title>
     </Head>
-
-    <div className="top-bar">
-      <div className="nav">
-        <Link href="/">
-          <a>Home</a>
-        </Link>
-        <Link href="/new">
-          <a>Add Pet</a>
-        </Link>
-      </div>
-
-      <img
-        id="title"
-        src="https://upload.wikimedia.org/wikipedia/commons/1/1f/Pet_logo_with_flowers.png"
-        alt="pet care logo"
-      />
-    </div>
-    <div className="grid wrapper">
-      <Component {...pageProps} />
-    </div>
+    <ThemeProvider theme={theme}>
+      {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
+      <CssBaseline />
+      <UserProvider>
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      </UserProvider>
+    </ThemeProvider>
   </>
 );
+// eslint-disable-next-line react/forbid-prop-types
+MyApp.propTypes = { Component: PropTypes.node, pageProps: PropTypes.any };
 
 export default MyApp;

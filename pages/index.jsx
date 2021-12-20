@@ -1,42 +1,28 @@
 /* eslint-disable no-underscore-dangle */
 import React from 'react';
 import PropTypes from 'prop-types';
-import Link from 'next/link';
+import {
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  Grid,
+  Typography,
+} from '@mui/material';
 
 import dbConnect from '../server/lib/dbConnect';
 import Bike from '../server/Bike/Bike';
+import BikeCard from '../components/organisms/BikeCard';
 
 const Index = ({ bikes = [] }) => (
-  <>
+  <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
     {/* Create a card for each pet */}
-    {bikes.map(bike => {
-      console.log(bike);
-      return (
-        <div key={bike._id}>
-          <div className="card">
-            {/* <Image src={bike.image_url} /> */}
-            <h5 className="pet-name">{bike.model}</h5>
-            <div className="main-content">
-              <p className="pet-name">{bike.color}</p>
-              <p className="owner">Owner: {bike.owner_name}</p>
-              <div className="btn-container">
-                <Link href="/[id]/edit" as={`/${bike._id}/edit`}>
-                  <button type="button" className="btn edit">
-                    Edit
-                  </button>
-                </Link>
-                <Link href="/[id]" as={`/${bike._id}`}>
-                  <button type="button" className="btn view">
-                    View
-                  </button>
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-      );
-    })}
-  </>
+    {bikes.map(bike => (
+      <Grid item key={bike._id} xs={4} sm={4} md={4}>
+        <BikeCard model={bike.model} color={bike.color} />
+      </Grid>
+    ))}
+  </Grid>
 );
 
 /* Retrieves pet(s) data from mongodb database */
