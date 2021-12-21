@@ -1,8 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Head from 'next/head';
-import { CssBaseline, ThemeProvider } from '@mui/material';
 import { UserProvider } from '@auth0/nextjs-auth0';
+import { CssBaseline, ThemeProvider } from '@mui/material';
+import { LocalizationProvider } from '@mui/lab';
+import DateAdapter from '@mui/lab/AdapterDateFns';
 
 import theme from '../styles/theme';
 import Layout from '../components/organisms/Layout';
@@ -21,13 +23,15 @@ const MyApp = ({ Component, pageProps }) => (
       <title>Pet Care App</title>
     </Head>
     <ThemeProvider theme={theme}>
-      {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-      <CssBaseline />
-      <UserProvider>
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
-      </UserProvider>
+      <LocalizationProvider dateAdapter={DateAdapter}>
+        {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
+        <CssBaseline />
+        <UserProvider>
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
+        </UserProvider>
+      </LocalizationProvider>
     </ThemeProvider>
   </>
 );

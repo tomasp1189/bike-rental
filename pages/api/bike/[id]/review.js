@@ -8,10 +8,10 @@
 
 import { withApiAuthRequired } from '@auth0/nextjs-auth0';
 
-import dbConnect from '../../../../lib/dbConnect';
 import controller from '../../../../server/Bike/controller';
 import errorHandler from '../../../../server/errors/errorHandler';
 import { httpStatusCodes } from '../../../../server/errors/httpStatusCodes';
+import dbConnect from '../../../../server/lib/dbConnect';
 import canReview from '../../../../server/lib/middleware/canReview';
 
 export default errorHandler(

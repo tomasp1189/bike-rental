@@ -16,10 +16,11 @@ const Layout = ({ children }) => (
         <Box
           sx={{
             display: 'flex',
+            alignItems: 'center',
           }}
         >
           <PedalBikeIcon sx={{ mr: 2 }} />
-          <Typography>Bike Rental</Typography>
+          <Typography variant="h6">Bike Rental</Typography>
         </Box>
         <Box
           sx={{

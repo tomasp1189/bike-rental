@@ -4,7 +4,7 @@ import Bike from '../../Bike/Bike';
 import Reservation from '../../Reservation/Reservation';
 import AppError from '../../errors/AppError';
 import { errorNames } from '../../errors/httpStatusCodes';
-import dbConnect from '../../../lib/dbConnect';
+import dbConnect from '../dbConnect';
 
 export default function canReview(handler) {
   return async (req, res) => {

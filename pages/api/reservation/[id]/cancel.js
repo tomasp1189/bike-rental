@@ -1,7 +1,7 @@
 import { withApiAuthRequired } from '@auth0/nextjs-auth0';
 
-import dbConnect from '../../../../lib/dbConnect';
 import errorHandler from '../../../../server/errors/errorHandler';
+import dbConnect from '../../../../server/lib/dbConnect';
 import ownsRecord from '../../../../server/lib/middleware/ownsRecord';
 import reservationController from '../../../../server/Reservation/controller';
 

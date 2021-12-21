@@ -1,10 +1,9 @@
 import { withApiAuthRequired } from '@auth0/nextjs-auth0';
 
-import dbConnect from '../../../lib/dbConnect';
-
 import reservationController from '../../../server/Reservation/controller';
 import errorHandler from '../../../server/errors/errorHandler';
 import isManager from '../../../server/lib/middleware/isManager';
+import dbConnect from '../../../server/lib/dbConnect';
 
 export default errorHandler(
   withApiAuthRequired(async (req, res) => {

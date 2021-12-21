@@ -1,9 +1,9 @@
 // import { withApiAuthRequired } from '@auth0/nextjs-auth0';
 import { withApiAuthRequired } from '@auth0/nextjs-auth0';
 
-import dbConnect from '../../../../lib/dbConnect';
 import bikeController from '../../../../server/Bike/controller';
 import errorHandler from '../../../../server/errors/errorHandler';
+import dbConnect from '../../../../server/lib/dbConnect';
 import isManager from '../../../../server/lib/middleware/isManager';
 
 export default errorHandler(

@@ -3,7 +3,7 @@ import { getSession } from '@auth0/nextjs-auth0';
 import AppError from '../../errors/AppError';
 import { errorNames } from '../../errors/httpStatusCodes';
 import Reservation from '../../Reservation/Reservation';
-import dbConnect from '../../../lib/dbConnect';
+import dbConnect from '../dbConnect';
 
 export default function ownsRecord(handler) {
   return async (req, res) => {

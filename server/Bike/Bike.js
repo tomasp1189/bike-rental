@@ -1,12 +1,6 @@
 import mongoose from 'mongoose';
 import notFoundPlugin from '../lib/notFoundPlugin';
 
-const AddressSchema = mongoose.Schema({
-  city: String,
-  street: String,
-  houseNumber: String,
-  coords: [Number],
-});
 const ReviewSchema = mongoose.Schema({
   rate: {
     type: Number,
@@ -39,11 +33,15 @@ const BikeSchema = new mongoose.Schema(
       maxlength: [20, 'Color cannot be more than 60 characters'],
     },
     location: {
-      /* The species of your pet */
-
-      type: AddressSchema,
-      // required: [true, ''],
-      required: false,
+      type: {
+        type: String, // Don't do `{ location: { type: String } }`
+        enum: ['Point'], // 'location.type' must be 'Point'
+        required: true,
+      },
+      coordinates: {
+        type: [Number],
+        required: true,
+      },
     },
     // subdocument
     reviews: {
