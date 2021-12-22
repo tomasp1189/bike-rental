@@ -17,7 +17,7 @@
     "curly": "off",
     "no-confusing-arrow": "off",
     "object-curly-newline": ["error", { "consistent": true }],
-    "function-paren-newline": ["error", "consistent"],
+    "function-paren-newline": "off",
     "react/jsx-curly-newline": "off"
   }
 }

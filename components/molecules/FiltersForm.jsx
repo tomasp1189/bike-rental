@@ -17,6 +17,8 @@ const validationSchema = yup.object({
         .min(startDate, 'End Date must be after Start Date')
         .typeError('End Date is required'),
     ),
+  rating: yup.number(),
+  location: yup.object().nullable(),
 });
 
 const FiltersForm = ({ onSubmit }) => {
@@ -25,10 +27,21 @@ const FiltersForm = ({ onSubmit }) => {
       startDate: new Date(),
       endDate: add(new Date(), { days: 1 }),
       rating: 0,
+      location: null,
     },
     validationSchema,
     onSubmit,
   });
+
+  const handleOnChangeRating = event => {
+    if (Number.parseFloat(event.target.value) === formik.values.rating)
+      return formik.setFieldValue('rating', 0);
+    return formik.setFieldValue(
+      'rating',
+      Number.parseFloat(event.target.value),
+    );
+  };
+
   return (
     <form onSubmit={formik.handleSubmit}>
       <Grid
@@ -69,6 +82,7 @@ const FiltersForm = ({ onSubmit }) => {
             name="location"
             label="Location"
             onPlaceSelected={value => formik.setFieldValue('location', value)}
+            value={formik.values.location}
           />
         </Grid>
         <Grid
@@ -87,7 +101,7 @@ const FiltersForm = ({ onSubmit }) => {
             id="rating"
             name="rating"
             value={formik.values.rating}
-            onChange={formik.handleChange}
+            onChange={handleOnChangeRating}
           />
         </Grid>
         <Grid
@@ -103,6 +117,33 @@ const FiltersForm = ({ onSubmit }) => {
         >
           <Button color="primary" variant="contained" fullWidth type="submit">
             Submit
+          </Button>
+        </Grid>
+        <Grid
+          item
+          xs={4}
+          sm={4}
+          md={3}
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'top',
+          }}
+        >
+          <Button
+            color="primary"
+            variant="contained"
+            fullWidth
+            onClick={() =>
+              formik.setValues({
+                startDate: new Date(),
+                endDate: add(new Date(), { days: 1 }),
+                rating: 0,
+                location: null,
+              })
+            }
+          >
+            Clear filters
           </Button>
         </Grid>
       </Grid>

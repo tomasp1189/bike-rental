@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { TextField } from '@mui/material';
 import { usePlacesWidget } from 'react-google-autocomplete';
@@ -10,10 +10,23 @@ const LocationAutocomplete = ({
   error,
   label,
   onPlaceSelected,
+  value,
 }) => {
+  const [tempValue, setTempValue] = useState(
+    () => value?.formatted_address || '',
+  );
+
+  // used to reset the controlled TextField component value when form is cleared
+  useEffect(() => !value && setTempValue(''), [value]);
+
+  const handleOnPlaceSelect = place => {
+    if (onPlaceSelected) onPlaceSelected(place);
+    setTempValue(place?.formatted_address);
+  };
+
   const { ref: materialRef } = usePlacesWidget({
     apiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
-    onPlaceSelected: place => onPlaceSelected && onPlaceSelected(place),
+    onPlaceSelected: handleOnPlaceSelect,
     options: {},
   });
   return (
@@ -27,6 +40,8 @@ const LocationAutocomplete = ({
       label={label}
       name={name}
       id={id}
+      onChange={event => setTempValue(event.target.value)}
+      value={tempValue}
     />
   );
 };
@@ -38,6 +53,18 @@ LocationAutocomplete.propTypes = {
   helperText: PropTypes.string,
   error: PropTypes.bool,
   label: PropTypes.string,
+  value: PropTypes.shape({
+    address_components: PropTypes.arrayOf(PropTypes.object),
+    formatted_address: PropTypes.string,
+    geometry: PropTypes.shape({
+      location: PropTypes.shape({
+        lat: PropTypes.number,
+        lng: PropTypes.number,
+      }),
+    }),
+    place_id: PropTypes.string,
+    html_attributions: PropTypes.arrayOf(PropTypes.object),
+  }),
 };
 
 export default LocationAutocomplete;
