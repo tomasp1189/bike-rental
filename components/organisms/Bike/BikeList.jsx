@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Grid, Modal, Paper, Typography } from '@mui/material';
+import { Grid } from '@mui/material';
 import BikeCard from './BikeCard';
-import ReservationForm from '../molecules/ReservationForm';
+import ReservationForm from '../Reservation/ReservationForm';
+import FormModal from '../../molecules/FormModal';
 
 const BikeList = ({ bikes }) => {
   const [isVisible, setIsVisible] = useState(false);
@@ -59,36 +60,18 @@ const BikeList = ({ bikes }) => {
           </Grid>
         ))}
       </Grid>
-
-      <Modal
-        sx={{ px: 2, py: 4 }}
+      <FormModal
         open={isVisible}
         onClose={() => {
           setIsVisible(false);
         }}
+        title="Reservation"
       >
-        <Paper
-          sx={{
-            width: '90%',
-            maxWidth: { xs: '100%', md: '50%' },
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-            px: { xs: 3, md: 4 },
-            pt: { xs: 4, md: 4 },
-            pb: { xs: 5, md: 6 },
-          }}
-        >
-          <Typography variant="h6" sx={{ mb: 3 }}>
-            Reservation
-          </Typography>
-          <ReservationForm
-            bike={selectedBike}
-            onSubmit={handleOnSubmitReservation}
-          />
-        </Paper>
-      </Modal>
+        <ReservationForm
+          bike={selectedBike}
+          onSubmit={handleOnSubmitReservation}
+        />
+      </FormModal>
     </>
   );
 };

@@ -7,7 +7,7 @@ import { CircularProgress, Typography } from '@mui/material';
 
 import Reservation from '../server/Reservation/Reservation';
 import dbConnect from '../server/lib/dbConnect';
-import ReservationList from '../components/organisms/ReservationList';
+import ReservationList from '../components/organisms/Reservation/ReservationList';
 
 const fetcher = url =>
   fetch(url)
@@ -15,8 +15,8 @@ const fetcher = url =>
     .then(json => json.data);
 
 const ReservationPage = ({ reservations = [] }) => {
-  const { data, isValidating } = useSWR(
-    '/api/reservation?cancelled=false',
+  const { data: pendingReservations, isValidating } = useSWR(
+    '/api/reservation?cancelled=false&pending=true',
     fetcher,
     {
       fallbackData: reservations,
@@ -28,21 +28,33 @@ const ReservationPage = ({ reservations = [] }) => {
       // refreshInterval: 0,
     },
   );
+  const { data: completedReservations, isValidating: isValidatingCompleted } =
+    useSWR('/api/reservation?cancelled=false&pending=false', fetcher, {
+      // revalidateOnFocus: false,
+      // revalidateOnMount: false,
+      // revalidateOnReconnect: false,
+      // refreshWhenOffline: false,
+      // refreshWhenHidden: false,
+      // refreshInterval: 0,
+    });
 
   return (
     <>
-      <Typography
-        component="h1"
-        variant="h2"
-        fontSize={{ xs: '2.25rem', md: '3.75rem' }}
-        mb={4}
-      >
+      <Typography component="h1" variant="h4" mb={4}>
         Pending Reservations
       </Typography>
-      {!data || isValidating ? (
+      {!pendingReservations || isValidating ? (
         <CircularProgress />
       ) : (
-        <ReservationList reservations={data} />
+        <ReservationList reservations={pendingReservations} />
+      )}
+      <Typography component="h2" variant="h4" mt={4} mb={4}>
+        Completed Reservations
+      </Typography>
+      {!completedReservations || isValidatingCompleted ? (
+        <CircularProgress />
+      ) : (
+        <ReservationList reservations={completedReservations} />
       )}
     </>
   );

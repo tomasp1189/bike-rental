@@ -7,7 +7,7 @@ import { add } from 'date-fns';
 
 import dbConnect from '../server/lib/dbConnect';
 import Filters from '../components/organisms/Filters';
-import BikeList from '../components/organisms/BikeList';
+import BikeList from '../components/organisms/Bike/BikeList';
 import services from '../server/Bike/services';
 
 const fetcher = url =>

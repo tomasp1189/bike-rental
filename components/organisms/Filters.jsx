@@ -12,7 +12,7 @@ import {
 import useSWR from 'swr';
 
 import ConditionalWrapper from '../helpers/ConditionalWrapper';
-import FiltersForm from '../molecules/FiltersForm';
+import FiltersForm from './FiltersForm';
 
 const fetcher = url =>
   fetch(url)

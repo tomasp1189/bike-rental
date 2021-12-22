@@ -1,4 +1,5 @@
 import { getSession } from '@auth0/nextjs-auth0';
+import { startOfDay } from 'date-fns';
 import AppError from '../errors/AppError';
 import { errorNames, httpStatusCodes } from '../errors/httpStatusCodes';
 import { buildDatesQuery } from '../lib/queryHelpers';
@@ -58,9 +59,17 @@ const all = async (req, res) => {
   const cancelledQuery = req.query.cancelled
     ? { isCancelled: req.query.cancelled }
     : {};
+
+  let pendingQuery = {};
+
+  if (req.query.pending === 'true')
+    pendingQuery = { endDate: { $gte: startOfDay(new Date()) } };
+  else if (req.query.pending === 'false')
+    pendingQuery = { endDate: { $lte: startOfDay(new Date()) } };
+
   const reservations = await Reservation.find({
-    $and: [{ ownerId: user.sub }, cancelledQuery],
-  }); /* find all the data in our database */
+    $and: [{ ownerId: user.sub }, cancelledQuery, pendingQuery],
+  }).populate('bike'); /* find all the data in our database */
   return res
     .status(httpStatusCodes.OK)
     .json({ success: true, data: reservations });

@@ -1,19 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {
-  Button,
-  colors,
-  Grid,
-  Rating,
-  TextField,
-  Typography,
-} from '@mui/material';
+import { Button, Grid, Rating, TextField, Typography } from '@mui/material';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { DatePicker } from '@mui/lab';
 import { add, compareAsc } from 'date-fns';
 import LocationAutocomplete from '../helpers/LocationAutocomplete';
-import Select from './Select';
+import Select from '../molecules/Select';
 
 const validationSchema = yup.object({
   startDate: yup.date(),
