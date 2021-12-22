@@ -51,7 +51,6 @@ const FiltersForm = ({ onSubmit }) => {
       >
         <Grid item xs={4} sm={4} md={3}>
           <DatePicker
-            sx={{ width: '100%' }}
             shouldDisableDate={date => {
               const start = new Date();
               start.setUTCHours(0, 0, 0, 0);
@@ -60,7 +59,9 @@ const FiltersForm = ({ onSubmit }) => {
             label="From"
             value={formik.values.startDate}
             onChange={value => formik.setFieldValue('startDate', value)}
-            renderInput={params => <TextField {...params} />}
+            renderInput={params => (
+              <TextField sx={{ width: '100%' }} {...params} />
+            )}
           />
         </Grid>
         <Grid item xs={4} sm={4} md={3}>
@@ -71,7 +72,9 @@ const FiltersForm = ({ onSubmit }) => {
               compareAsc(date, formik.values.startDate) < 1
             }
             onChange={value => formik.setFieldValue('endDate', value)}
-            renderInput={params => <TextField {...params} />}
+            renderInput={params => (
+              <TextField sx={{ width: '100%' }} {...params} />
+            )}
             error={formik.touched.endDate && Boolean(formik.errors.endDate)}
             helperText={formik.touched.endDate && formik.errors.endDate}
           />
@@ -115,8 +118,8 @@ const FiltersForm = ({ onSubmit }) => {
             justifyContent: 'top',
           }}
         >
-          <Button color="primary" variant="contained" fullWidth type="submit">
-            Submit
+          <Button color="primary" variant="outlined" fullWidth type="submit">
+            Apply
           </Button>
         </Grid>
         <Grid
@@ -132,7 +135,7 @@ const FiltersForm = ({ onSubmit }) => {
         >
           <Button
             color="primary"
-            variant="contained"
+            variant="outlined"
             fullWidth
             onClick={() =>
               formik.setValues({

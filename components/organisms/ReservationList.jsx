@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Grid } from '@mui/material';
+import { Grid, Typography } from '@mui/material';
+import Link from 'next/link';
+
 import ReservationCard from './ReservationCard';
 import ConfirmationDialog from './ConfirmationDialog';
 
@@ -25,6 +27,7 @@ const ReservationList = ({ reservations }) => {
       }
 
       setIsVisible(false);
+      setSelectedReservation(null);
     } catch (error) {
       console.log('Failed create reservation');
     }
@@ -49,17 +52,26 @@ const ReservationList = ({ reservations }) => {
         columns={{ xs: 4, sm: 8, md: 12 }}
       >
         {/* Create a card for each pet */}
-        {reservations.map(reservation => (
-          <Grid item key={reservation._id} xs={4} sm={4} md={4}>
-            <ReservationCard
-              id={reservation._id}
-              startDate={reservation.startDate}
-              endDate={reservation.endDate}
-              bike={reservation.bike}
-              onClickCancel={handleOnClickCancel(reservation)}
-            />
+        {reservations?.length > 0 ? (
+          reservations.map(reservation => (
+            <Grid item key={reservation._id} xs={4} sm={4} md={4}>
+              <ReservationCard
+                id={reservation._id}
+                startDate={reservation.startDate}
+                endDate={reservation.endDate}
+                bike={reservation.bike}
+                onClickCancel={handleOnClickCancel(reservation)}
+              />
+            </Grid>
+          ))
+        ) : (
+          <Grid item xs={4} sm={8} md={12}>
+            <Typography>
+              You have no pending reservations,{' '}
+              <Link href="/bike">make your first one!</Link>
+            </Typography>
           </Grid>
-        ))}
+        )}
       </Grid>
       <ConfirmationDialog
         open={isVisible}

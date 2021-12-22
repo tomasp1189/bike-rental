@@ -31,7 +31,12 @@ const ReservationPage = ({ reservations = [] }) => {
 
   return (
     <>
-      <Typography component="h1" variant="h2" mb={4}>
+      <Typography
+        component="h1"
+        variant="h2"
+        fontSize={{ xs: '2.25rem', md: '3.75rem' }}
+        mb={4}
+      >
         Pending Reservations
       </Typography>
       {!data || isValidating ? (

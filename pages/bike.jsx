@@ -1,13 +1,14 @@
 /* eslint-disable no-underscore-dangle */
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { CircularProgress } from '@mui/material';
+import { CircularProgress, Typography } from '@mui/material';
 import useSWR from 'swr';
+import { add } from 'date-fns';
 
 import dbConnect from '../server/lib/dbConnect';
-import Bike from '../server/Bike/Bike';
 import Filters from '../components/organisms/Filters';
 import BikeList from '../components/organisms/BikeList';
+import services from '../server/Bike/services';
 
 const fetcher = url =>
   fetch(url)
@@ -55,6 +56,14 @@ const Index = ({ bikes = [] }) => {
 
   return (
     <>
+      <Typography
+        component="h1"
+        variant="h2"
+        fontSize={{ xs: '2.25rem', md: '3.75rem' }}
+        mb={4}
+      >
+        Available Bikes
+      </Typography>
       <Filters onSubmit={handleFilterSubmit} />
       {!data || isValidating ? <CircularProgress /> : <BikeList bikes={data} />}
     </>
@@ -65,7 +74,13 @@ const Index = ({ bikes = [] }) => {
 export async function getServerSideProps() {
   /* find all the data in our database */
   await dbConnect();
-  const result = await Bike.find({});
+
+  const startDate = new Date();
+  const endDate = add(new Date(), { days: 1 });
+  const result = await services.searchAvailableBikes(
+    startDate.toISOString(),
+    endDate.toISOString(),
+  );
   const bikes = result.map(doc => {
     const bike = JSON.parse(JSON.stringify(doc));
     //  doc.toObject();

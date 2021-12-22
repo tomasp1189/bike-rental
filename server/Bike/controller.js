@@ -1,9 +1,8 @@
 /* eslint-disable indent */
 import { getSession } from '@auth0/nextjs-auth0';
 import { httpStatusCodes } from '../errors/httpStatusCodes';
-import { buildDatesQuery, buildLocationQuery } from '../lib/queryHelpers';
-import Reservation from '../Reservation/Reservation';
 import Bike from './Bike';
+import services from './services';
 
 // errors are handled in errorHandler middleware. No need for try/catch blocks
 const create = async (req, res) => {
@@ -36,27 +35,12 @@ const deleteBike = async (req, res) => {
     .json({ success: true, data: deletedBike });
 };
 const all = async (req, res) => {
-  const datesQuery = buildDatesQuery(req.query.startDate, req.query.endDate);
-  const reservations = await Reservation.find(
-    {
-      $and: [{ cancelled: false }, datesQuery],
-    },
-    'bike',
+  const bikes = services.searchAvailableBikes(
+    req.query.startDate,
+    req.query.endDate,
+    req.query.location,
+    req.query.rating,
   );
-  const ids = reservations.map(r => r.bike);
-
-  const coordinates = req.query.location
-    ?.split(',')
-    .map(value => Number.parseFloat(value, 10));
-  const locationQuery = buildLocationQuery(coordinates);
-
-  const ratingQuery = req.query.rating
-    ? { averageRating: { $gte: Number.parseFloat(req.query.rating) } }
-    : {};
-
-  const bikes = await Bike.find({
-    $and: [{ _id: { $nin: ids } }, locationQuery, ratingQuery],
-  }); /* find all the data in our database */
 
   return res.status(httpStatusCodes.OK).json({ success: true, data: bikes });
 };

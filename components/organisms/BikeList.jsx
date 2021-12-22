@@ -5,7 +5,7 @@ import BikeCard from './BikeCard';
 import ReservationForm from '../molecules/ReservationForm';
 
 const BikeList = ({ bikes }) => {
-  const [isVisible, setIsVisible] = useState(null);
+  const [isVisible, setIsVisible] = useState(false);
   const [selectedBike, setSelectedBike] = useState(null);
   const contentType = 'application/json';
 
@@ -26,6 +26,7 @@ const BikeList = ({ bikes }) => {
       }
 
       setIsVisible(false);
+      setSelectedBike(null);
     } catch (error) {
       console.log('Failed create reservation');
     }
@@ -58,37 +59,36 @@ const BikeList = ({ bikes }) => {
           </Grid>
         ))}
       </Grid>
-      {isVisible && (
-        <Modal
-          sx={{ px: 2, py: 4 }}
-          open
-          onClose={() => {
-            setIsVisible(false);
+
+      <Modal
+        sx={{ px: 2, py: 4 }}
+        open={isVisible}
+        onClose={() => {
+          setIsVisible(false);
+        }}
+      >
+        <Paper
+          sx={{
+            width: '90%',
+            maxWidth: { xs: '100%', md: '50%' },
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            px: { xs: 3, md: 4 },
+            pt: { xs: 4, md: 4 },
+            pb: { xs: 5, md: 6 },
           }}
         >
-          <Paper
-            sx={{
-              width: '90%',
-              maxWidth: { xs: '100%', md: '50%' },
-              position: 'absolute',
-              top: '50%',
-              left: '50%',
-              transform: 'translate(-50%, -50%)',
-              px: { xs: 3, md: 4 },
-              pt: { xs: 4, md: 4 },
-              pb: { xs: 5, md: 6 },
-            }}
-          >
-            <Typography variant="h6" sx={{ mb: 3 }}>
-              Reservation
-            </Typography>
-            <ReservationForm
-              bike={selectedBike}
-              onSubmit={handleOnSubmitReservation}
-            />
-          </Paper>
-        </Modal>
-      )}
+          <Typography variant="h6" sx={{ mb: 3 }}>
+            Reservation
+          </Typography>
+          <ReservationForm
+            bike={selectedBike}
+            onSubmit={handleOnSubmitReservation}
+          />
+        </Paper>
+      </Modal>
     </>
   );
 };
