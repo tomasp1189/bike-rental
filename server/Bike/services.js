@@ -2,7 +2,14 @@ import { buildDatesQuery, buildLocationQuery } from '../lib/queryHelpers';
 import Reservation from '../Reservation/Reservation';
 import Bike from './Bike';
 
-const searchAvailableBikes = async (startDate, endDate, location, rating) => {
+const searchAvailableBikes = async (
+  startDate,
+  endDate,
+  location,
+  rating,
+  model,
+  color,
+) => {
   const datesQuery = buildDatesQuery(startDate, endDate);
   const reservations = await Reservation.find(
     {
@@ -20,10 +27,17 @@ const searchAvailableBikes = async (startDate, endDate, location, rating) => {
   const ratingQuery = rating
     ? { averageRating: { $gte: Number.parseFloat(rating) } }
     : {};
-
+  const modelQuery = model ? { model: { $regex: new RegExp(model, 'i') } } : {};
+  const colorQuery = color ? { color: { $regex: new RegExp(color, 'i') } } : {};
   const bikes = await Bike.find({
-    $and: [{ _id: { $nin: ids } }, locationQuery, ratingQuery],
-  }); /* find all the data in our database */
+    $and: [
+      { _id: { $nin: ids } },
+      locationQuery,
+      ratingQuery,
+      modelQuery,
+      colorQuery,
+    ],
+  });
 
   return bikes;
 };

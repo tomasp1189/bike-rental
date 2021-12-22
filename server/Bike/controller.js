@@ -35,11 +35,13 @@ const deleteBike = async (req, res) => {
     .json({ success: true, data: deletedBike });
 };
 const all = async (req, res) => {
-  const bikes = services.searchAvailableBikes(
+  const bikes = await services.searchAvailableBikes(
     req.query.startDate,
     req.query.endDate,
     req.query.location,
     req.query.rating,
+    req.query.model,
+    req.query.color,
   );
 
   return res.status(httpStatusCodes.OK).json({ success: true, data: bikes });
@@ -64,6 +66,18 @@ const review = async (req, res) => {
   );
   return res.status(httpStatusCodes.OK).json({ success: true, data: bike });
 };
+const allModels = async (req, res) => {
+  const bikeModels = await Bike.find().distinct('model');
+  return res
+    .status(httpStatusCodes.OK)
+    .json({ success: true, data: bikeModels });
+};
+const allColors = async (req, res) => {
+  const bikeModels = await Bike.find().distinct('color');
+  return res
+    .status(httpStatusCodes.OK)
+    .json({ success: true, data: bikeModels });
+};
 
 export default {
   create,
@@ -72,4 +86,6 @@ export default {
   deleteBike,
   all,
   review,
+  allModels,
+  allColors,
 };

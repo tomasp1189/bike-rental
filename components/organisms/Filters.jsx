@@ -9,14 +9,24 @@ import {
   useMediaQuery,
   useTheme,
 } from '@mui/material';
+import useSWR from 'swr';
+
 import ConditionalWrapper from '../helpers/ConditionalWrapper';
 import FiltersForm from '../molecules/FiltersForm';
+
+const fetcher = url =>
+  fetch(url)
+    .then(res => res.json())
+    .then(json => json.data);
 
 const Filters = ({ onSubmit }) => {
   const theme = useTheme();
   const [isVisible, setIsVisible] = useState(false);
 
   const matches = useMediaQuery(theme.breakpoints.up('md'));
+
+  const { data: models } = useSWR('/api/bike/allModels', fetcher);
+  const { data: colors } = useSWR('/api/bike/allColors', fetcher);
 
   const handleSubmit = useCallback(
     values => {
@@ -65,7 +75,11 @@ const Filters = ({ onSubmit }) => {
                 Filters:
               </Typography>
             )}
-            <FiltersForm onSubmit={handleSubmit} />
+            <FiltersForm
+              onSubmit={handleSubmit}
+              colors={colors.map(color => ({ label: color, value: color }))}
+              models={models.map(model => ({ label: model, value: model }))}
+            />
           </Paper>
         </ConditionalWrapper>
       )}
