@@ -5,7 +5,6 @@ import { UserProvider } from '@auth0/nextjs-auth0';
 import { CssBaseline, ThemeProvider } from '@mui/material';
 import { LocalizationProvider } from '@mui/lab';
 import DateAdapter from '@mui/lab/AdapterDateFns';
-import Script from 'next/script';
 
 import theme from '../styles/theme';
 import Layout from '../components/organisms/Layout';

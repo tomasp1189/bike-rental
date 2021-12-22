@@ -54,9 +54,13 @@ const deleteReservation = async (req, res) => {
     .json({ success: true, data: deletedReservation });
 };
 const all = async (req, res) => {
-  const reservations = await Reservation.find(
-    {},
-  ); /* find all the data in our database */
+  const { user } = getSession(req);
+  const cancelledQuery = req.query.cancelled
+    ? { isCancelled: req.query.cancelled }
+    : {};
+  const reservations = await Reservation.find({
+    $and: [{ ownerId: user.sub }, cancelledQuery],
+  }); /* find all the data in our database */
   return res
     .status(httpStatusCodes.OK)
     .json({ success: true, data: reservations });
@@ -64,7 +68,7 @@ const all = async (req, res) => {
 const cancel = async (req, res) => {
   const reservation = await Reservation.findByIdAndUpdate(
     req.query.id,
-    { is_cancelled: true },
+    { isCancelled: true },
     {
       new: true,
       runValidators: true,
