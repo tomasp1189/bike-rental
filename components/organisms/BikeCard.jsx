@@ -5,25 +5,32 @@ import {
   Card,
   CardActions,
   CardContent,
+  Rating,
   Typography,
 } from '@mui/material';
 import { useUser } from '@auth0/nextjs-auth0';
 
-const BikeCard = ({ model, color }) => {
+const BikeCard = ({ model, color, rating, onClickReserve }) => {
   const { user, error, isLoading } = useUser();
-  console.log(user);
+
   if (error) return <div>{error.message}</div>;
   return (
     <Card sx={{ width: '100%' }}>
       <CardContent>
-        <Typography gutterBottom variant="h5" component="h2">
+        <Typography gutterBottom variant="h5" component="h2" mb={0}>
           {model}
         </Typography>
+        <Rating value={rating} size="small" sx={{ mb: 2 }} />
         <Typography>Color: {color}</Typography>
       </CardContent>
-      <CardActions>
+      <CardActions sx={{ p: 2 }}>
         {user ? (
-          <Button variant="contained" size="small" color="primary">
+          <Button
+            variant="contained"
+            size="small"
+            color="primary"
+            onClick={onClickReserve}
+          >
             Reserve
           </Button>
         ) : (
@@ -36,6 +43,11 @@ const BikeCard = ({ model, color }) => {
   );
 };
 
-BikeCard.propTypes = { model: PropTypes.string, color: PropTypes.string };
+BikeCard.propTypes = {
+  model: PropTypes.string,
+  color: PropTypes.string,
+  rating: PropTypes.number,
+  onClickReserve: PropTypes.func,
+};
 
 export default BikeCard;
