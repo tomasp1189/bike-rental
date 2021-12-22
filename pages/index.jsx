@@ -56,6 +56,16 @@ const Index = ({ bikes = [] }) => {
     const queryString = Object.keys(values)
       .map(key => {
         if (key.includes('date')) return `${key}=${values[key].toISOString()}`;
+        if (key.includes('location')) {
+          if (values[key]) {
+            const { geometry } = values[key];
+            const coordinates = [
+              geometry.location.lng(),
+              geometry.location.lat(),
+            ];
+            return `${key}=${coordinates.join(',')}`;
+          }
+        }
         return `${key}=${values[key]}`;
       })
       .join('&');

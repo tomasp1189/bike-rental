@@ -14,6 +14,17 @@ const ReviewSchema = mongoose.Schema({
     required: true,
   },
 });
+const PointSchema = new mongoose.Schema({
+  type: {
+    type: String,
+    enum: ['Point'],
+    required: true,
+  },
+  coordinates: {
+    type: [Number],
+    required: true,
+  },
+});
 
 /* BikeSchema will correspond to a collection in your MongoDB database. */
 const BikeSchema = new mongoose.Schema(
@@ -33,15 +44,9 @@ const BikeSchema = new mongoose.Schema(
       maxlength: [20, 'Color cannot be more than 60 characters'],
     },
     location: {
-      type: {
-        type: String, // Don't do `{ location: { type: String } }`
-        enum: ['Point'], // 'location.type' must be 'Point'
-        required: true,
-      },
-      coordinates: {
-        type: [Number],
-        required: true,
-      },
+      type: PointSchema,
+      required: true,
+      // index: '2dsphere',
     },
     // subdocument
     reviews: {
@@ -60,7 +65,9 @@ const BikeSchema = new mongoose.Schema(
 BikeSchema.pre(
   ['updateOne', 'findOneAndUpdate', 'findByIdAndUpdate'],
   async function updateAverageRating(next) {
-    const currentReview = this.getUpdate().$push.reviews;
+    const currentReview = this.getUpdate()?.$push?.reviews;
+    if (!currentReview) next();
+
     const docToUpdate = await this.model.findOne(this.getQuery());
     console.log('updateAverageRating', currentReview);
     // const docToUpdate = await this.model.findOne(this.getQuery());
@@ -86,5 +93,6 @@ BikeSchema.pre(
   },
 );
 BikeSchema.plugin(notFoundPlugin);
+BikeSchema.index({ location: '2dsphere' });
 
 export default mongoose.models.Bike || mongoose.model('Bike', BikeSchema);

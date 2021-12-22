@@ -16,6 +16,8 @@
     "nonblock-statement-body-position": "off",
     "curly": "off",
     "no-confusing-arrow": "off",
-    "object-curly-newline": ["error", { "consistent": true }]
+    "object-curly-newline": ["error", { "consistent": true }],
+    "function-paren-newline": ["error", "consistent"],
+    "react/jsx-curly-newline": "off"
   }
 }

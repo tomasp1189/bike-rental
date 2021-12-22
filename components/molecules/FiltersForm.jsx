@@ -5,6 +5,7 @@ import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { DatePicker } from '@mui/lab';
 import { add, compareAsc } from 'date-fns';
+import LocationAutocomplete from '../helpers/LocationAutocomplete';
 
 const validationSchema = yup.object({
   startDate: yup.date(),
@@ -63,7 +64,12 @@ const FiltersForm = ({ onSubmit }) => {
           />
         </Grid>
         <Grid item xs={4} sm={4} md={3}>
-          <TextField label="Location" />
+          <LocationAutocomplete
+            id="location"
+            name="location"
+            label="Location"
+            onPlaceSelected={value => formik.setFieldValue('location', value)}
+          />
         </Grid>
         <Grid
           item

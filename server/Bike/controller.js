@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 import { getSession } from '@auth0/nextjs-auth0';
 import { httpStatusCodes } from '../errors/httpStatusCodes';
 import { buildDatesQuery } from '../lib/queryHelpers';
@@ -43,8 +44,27 @@ const all = async (req, res) => {
     'bike',
   );
   const ids = reservations.map(r => r.bike);
+  const coordinates = req.query.location
+    ?.split(',')
+    .map(value => Number.parseFloat(value, 10));
+  // const locationQuery ={}
+  console.log(coordinates);
+  const locationQuery =
+    !coordinates || coordinates.length < 2
+      ? {}
+      : {
+          location: {
+            $near: {
+              $geometry: {
+                type: 'Point',
+                coordinates: [coordinates[0], coordinates[1]],
+              },
+              $maxDistance: 15000,
+            },
+          },
+        };
   const bikes = await Bike.find({
-    $and: [{ _id: { $nin: ids } }],
+    $and: [{ _id: { $nin: ids } }, locationQuery],
   }); /* find all the data in our database */
 
   console.log(reservations, bikes);
