@@ -16,7 +16,15 @@ const Filters = ({ onSubmit }) => {
   const theme = useTheme();
   const [isVisible, setIsVisible] = useState(false);
 
-  const matches = useMediaQuery(theme.breakpoints.up('lg'));
+  const matches = useMediaQuery(theme.breakpoints.up('md'));
+
+  const handleSubmit = useCallback(
+    values => {
+      onSubmit(values);
+      if (!matches) setIsVisible(false);
+    },
+    [matches, onSubmit],
+  );
 
   const wrapper = useCallback(
     children => (
@@ -57,7 +65,7 @@ const Filters = ({ onSubmit }) => {
                 Filters:
               </Typography>
             )}
-            <FiltersForm onSubmit={onSubmit} />
+            <FiltersForm onSubmit={handleSubmit} />
           </Paper>
         </ConditionalWrapper>
       )}

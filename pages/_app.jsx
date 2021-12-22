@@ -10,6 +10,8 @@ import Script from 'next/script';
 import theme from '../styles/theme';
 import Layout from '../components/organisms/Layout';
 
+import '../styles/global.css';
+
 const MyApp = ({ Component, pageProps }) => (
   <>
     <Head>
