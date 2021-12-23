@@ -7,66 +7,21 @@ import ReservationCard from './ReservationCard';
 import ReviewForm from './ReviewForm';
 import ConfirmationDialog from '../ConfirmationDialog';
 import FormModal from '../../molecules/FormModal';
+import apiClient from '../../../helpers/apiClient';
 
 const ReservationList = ({ reservations }) => {
   const [isVisible, setIsVisible] = useState(null);
   const [addReviewIsVisible, setAddReviewIsVisible] = useState(null);
   const [selectedReservation, setSelectedReservation] = useState(null);
-  const contentType = 'application/json';
-
-  const postData = async reservationId => {
-    try {
-      const res = await fetch(`/api/reservation/${reservationId}/cancel`, {
-        method: 'PUT',
-        headers: {
-          Accept: contentType,
-          'Content-Type': contentType,
-        },
-      });
-
-      // Throw error with status code in case Fetch API req failed
-      if (!res.ok) {
-        throw new Error(res.status);
-      }
-
-      setIsVisible(false);
-      setSelectedReservation(null);
-    } catch (error) {
-      console.log('Failed create reservation');
-    }
-  };
-  const postReview = async values => {
-    try {
-      const res = await fetch(`/api/bike/${values.id}/review`, {
-        method: 'PUT',
-        headers: {
-          Accept: contentType,
-          'Content-Type': contentType,
-        },
-        body: JSON.stringify({
-          review: {
-            rate: values.rating,
-          },
-        }),
-      });
-
-      // Throw error with status code in case Fetch API req failed
-      if (!res.ok) {
-        throw new Error(res.status);
-      }
-
-      setAddReviewIsVisible(false);
-      setSelectedReservation(null);
-    } catch (error) {
-      console.log('Failed create reservation');
-    }
-  };
 
   const handleOnClose = () => {
     setIsVisible(false);
   };
   const handleOnClickConfirm = () => {
-    postData({ id: selectedReservation._id });
+    apiClient.cancelReservation(selectedReservation._id, () => {
+      setIsVisible(false);
+      setSelectedReservation(null);
+    });
   };
   const handleOnClickCancel = reservation => () => {
     setSelectedReservation(reservation);
@@ -77,7 +32,10 @@ const ReservationList = ({ reservations }) => {
     setAddReviewIsVisible(true);
   };
   const handleOnClickSubmitReview = values => {
-    postReview({ id: values.bike, rating: values.rating });
+    apiClient.addReview({ id: values.bike, rating: values.rating }, () => {
+      setAddReviewIsVisible(false);
+      setSelectedReservation(null);
+    });
   };
 
   return (

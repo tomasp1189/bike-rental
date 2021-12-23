@@ -9,18 +9,14 @@ import dbConnect from '../server/lib/dbConnect';
 import Filters from '../components/organisms/Filters';
 import BikeList from '../components/organisms/Bike/BikeList';
 import services from '../server/Bike/services';
-
-const fetcher = url =>
-  fetch(url)
-    .then(res => res.json())
-    .then(json => json.data);
+import apiClient from '../helpers/apiClient';
 
 const Index = ({ bikes = [] }) => {
   const [query, setQuery] = useState('');
 
   const { data, mutate, isValidating } = useSWR(
     `/api/bike/?${query}`,
-    fetcher,
+    apiClient.fetcher,
     {
       fallbackData: bikes,
       revalidateOnFocus: false,
@@ -58,8 +54,7 @@ const Index = ({ bikes = [] }) => {
     <>
       <Typography
         component="h1"
-        variant="h2"
-        fontSize={{ xs: '2.25rem', md: '3.75rem' }}
+        variant="h4"
         mb={4}
       >
         Available Bikes

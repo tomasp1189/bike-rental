@@ -12,7 +12,7 @@ const NavBar = props => {
   // const isManager = user['http://localhost:3000/roles'].includes('Manager');
   const router = useRouter();
   return (
-    <AppBar position="static">
+    <AppBar position="fixed">
       <Toolbar
         sx={{
           display: 'flex',
@@ -57,6 +57,7 @@ const NavBar = props => {
         </Box>
       </Toolbar>
     </AppBar>
+    // add toolbar to push page downwards
   );
 };
 

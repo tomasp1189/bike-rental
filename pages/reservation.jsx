@@ -8,35 +8,22 @@ import { CircularProgress, Typography } from '@mui/material';
 import Reservation from '../server/Reservation/Reservation';
 import dbConnect from '../server/lib/dbConnect';
 import ReservationList from '../components/organisms/Reservation/ReservationList';
-
-const fetcher = url =>
-  fetch(url)
-    .then(res => res.json())
-    .then(json => json.data);
+import apiClient from '../helpers/apiClient';
 
 const ReservationPage = ({ reservations = [] }) => {
   const { data: pendingReservations, isValidating } = useSWR(
     '/api/reservation?cancelled=false&pending=true',
-    fetcher,
+    apiClient.fetcher,
     {
       fallbackData: reservations,
-      // revalidateOnFocus: false,
-      // revalidateOnMount: false,
-      // revalidateOnReconnect: false,
-      // refreshWhenOffline: false,
-      // refreshWhenHidden: false,
-      // refreshInterval: 0,
     },
   );
   const { data: completedReservations, isValidating: isValidatingCompleted } =
-    useSWR('/api/reservation?cancelled=false&pending=false', fetcher, {
-      // revalidateOnFocus: false,
-      // revalidateOnMount: false,
-      // revalidateOnReconnect: false,
-      // refreshWhenOffline: false,
-      // refreshWhenHidden: false,
-      // refreshInterval: 0,
-    });
+    useSWR(
+      '/api/reservation?cancelled=false&pending=false',
+      apiClient.fetcher,
+      {},
+    );
 
   return (
     <>

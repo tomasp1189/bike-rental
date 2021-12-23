@@ -11,13 +11,9 @@ import {
 } from '@mui/material';
 import useSWR from 'swr';
 
-import ConditionalWrapper from '../helpers/ConditionalWrapper';
 import FiltersForm from './FiltersForm';
-
-const fetcher = url =>
-  fetch(url)
-    .then(res => res.json())
-    .then(json => json.data);
+import ConditionalWrapper from '../helpers/ConditionalWrapper';
+import apiClient from '../../helpers/apiClient';
 
 const Filters = ({ onSubmit }) => {
   const theme = useTheme();
@@ -25,8 +21,8 @@ const Filters = ({ onSubmit }) => {
 
   const matches = useMediaQuery(theme.breakpoints.up('md'));
 
-  const { data: models } = useSWR('/api/bike/allModels', fetcher);
-  const { data: colors } = useSWR('/api/bike/allColors', fetcher);
+  const { data: models } = useSWR('/api/bike/allModels', apiClient.fetcher);
+  const { data: colors } = useSWR('/api/bike/allColors', apiClient.fetcher);
 
   const handleSubmit = useCallback(
     values => {

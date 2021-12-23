@@ -13,19 +13,15 @@ export default function errorHandler(handler) {
             .status(httpStatusCodes.BAD_REQUEST)
             .json({ success: false, message: err.message });
         case errorNames.UNAUTHORIZED_ERROR:
-          return res
-            .status(httpStatusCodes.UNAUTHORIZED)
-            .json({
-              success: false,
-              message: err.message || 'Unauthorized request',
-            });
+          return res.status(httpStatusCodes.UNAUTHORIZED).json({
+            success: false,
+            message: err.message || 'Unauthorized request',
+          });
         case errorNames.FORBIDDEN:
-          return res
-            .status(httpStatusCodes.FORBIDDEN)
-            .json({
-              success: false,
-              message: err.message || 'Forbidden request',
-            });
+          return res.status(httpStatusCodes.FORBIDDEN).json({
+            success: false,
+            message: err.message || 'Forbidden request',
+          });
         case errorNames.NOT_FOUND:
           return res.status(httpStatusCodes.NOT_FOUND).json({ message: err });
         case errorNames.CONFLICT:
@@ -34,9 +30,11 @@ export default function errorHandler(handler) {
             .json({ success: false, message: err.message });
         case errorNames.INTERNAL_SERVER:
         default:
-          return res
-            .status(httpStatusCodes.INTERNAL_SERVER)
-            .json({ success: false, message: 'Internal Server Error' });
+          console.log(errorNames.INTERNAL_SERVER, err.message);
+          return res.status(httpStatusCodes.INTERNAL_SERVER).json({
+            success: false,
+            message: err.message || 'Internal Server Error',
+          });
       }
     }
   };

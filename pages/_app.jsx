@@ -4,11 +4,14 @@ import Head from 'next/head';
 import { UserProvider } from '@auth0/nextjs-auth0';
 import { CssBaseline, ThemeProvider } from '@mui/material';
 import { LocalizationProvider } from '@mui/lab';
+import { ToastContainer } from 'react-toastify';
 import DateAdapter from '@mui/lab/AdapterDateFns';
 
 import theme from '../styles/theme';
 import Layout from '../components/organisms/Layout';
+import ErrorBoundary from '../components/organisms/ErrorBoundary';
 
+import 'react-toastify/dist/ReactToastify.css';
 import '../styles/global.css';
 
 const MyApp = ({ Component, pageProps }) => (
@@ -30,13 +33,16 @@ const MyApp = ({ Component, pageProps }) => (
     /> */}
     <ThemeProvider theme={theme}>
       <LocalizationProvider dateAdapter={DateAdapter}>
-        {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-        <CssBaseline />
-        <UserProvider>
-          <Layout>
-            <Component {...pageProps} />
-          </Layout>
-        </UserProvider>
+        <ErrorBoundary>
+          {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
+          <CssBaseline />
+          <UserProvider>
+            <Layout>
+              <Component {...pageProps} />
+            </Layout>
+          </UserProvider>
+          <ToastContainer />
+        </ErrorBoundary>
       </LocalizationProvider>
     </ThemeProvider>
   </>

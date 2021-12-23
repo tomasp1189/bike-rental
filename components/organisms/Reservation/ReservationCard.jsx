@@ -20,9 +20,7 @@ const ReservationCard = ({
   onClickCancel,
   onClickAddReview,
 }) => {
-  const { user, error, isLoading } = useUser();
-
-  if (error) return 'Something has gone wrong with users';
+  const { user, isLoading } = useUser();
 
   const isCompletedReservation = useMemo(
     () => compareAsc(new Date(endDate), new Date()) < 1,

@@ -2,6 +2,10 @@ import mongoose, { Schema } from 'mongoose';
 import AppError from '../errors/AppError';
 import { errorNames } from '../errors/httpStatusCodes';
 import notFoundPlugin from '../lib/notFoundPlugin';
+// To make sure I avoid MissingSchemaError: Schema hasn't been registered for model "Bike".
+// I need to import Bike in Reservation
+// eslint-disable-next-line no-unused-vars
+import Bike from '../Bike/Bike';
 
 /* ReservationSchema will correspond to a collection in your MongoDB database. */
 const ReservationSchema = new mongoose.Schema({

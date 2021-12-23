@@ -1,40 +1,21 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Grid } from '@mui/material';
+
 import BikeCard from './BikeCard';
 import ReservationForm from '../Reservation/ReservationForm';
 import FormModal from '../../molecules/FormModal';
+import apiClient from '../../../helpers/apiClient';
 
 const BikeList = ({ bikes }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [selectedBike, setSelectedBike] = useState(null);
-  const contentType = 'application/json';
-
-  const postData = async form => {
-    try {
-      const res = await fetch('/api/reservation', {
-        method: 'POST',
-        headers: {
-          Accept: contentType,
-          'Content-Type': contentType,
-        },
-        body: JSON.stringify(form),
-      });
-
-      // Throw error with status code in case Fetch API req failed
-      if (!res.ok) {
-        throw new Error(res.status);
-      }
-
-      setIsVisible(false);
-      setSelectedBike(null);
-    } catch (error) {
-      console.log('Failed create reservation');
-    }
-  };
 
   const handleOnSubmitReservation = values => {
-    postData(values);
+    apiClient.postReservation(values, () => {
+      setIsVisible(false);
+      setSelectedBike(null);
+    });
   };
   const handleOnClickReserve = bike => () => {
     setSelectedBike(bike);
