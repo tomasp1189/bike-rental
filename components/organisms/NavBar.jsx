@@ -60,7 +60,7 @@ const NavBar = () => {
       <Button
         key="/admin/user"
         color={matches ? 'secondary' : 'primary'}
-        sx={{ my: { xs: 0, md: 2 }, color: 'white', display: 'block' }}
+        sx={{ my: { xs: 0, md: 2 }, display: 'block' }}
         onClick={() => router.push('/admin/user')}
       >
         Users
@@ -68,7 +68,7 @@ const NavBar = () => {
       <Button
         key="/admin/bike"
         color={matches ? 'secondary' : 'primary'}
-        sx={{ my: { xs: 0, md: 2 }, color: 'white', display: 'block' }}
+        sx={{ my: { xs: 0, md: 2 }, display: 'block' }}
         onClick={() => router.push('/admin/bike')}
       >
         Bikes
