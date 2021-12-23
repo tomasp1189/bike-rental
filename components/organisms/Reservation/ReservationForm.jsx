@@ -49,6 +49,7 @@ const ReservationForm = ({ bike, onSubmit }) => {
             label="From"
             value={formik.values.startDate}
             onChange={value => formik.setFieldValue('startDate', value)}
+            onBlur={formik.handleBlur}
             renderInput={params => (
               <TextField sx={{ width: '100%' }} {...params} />
             )}
@@ -62,6 +63,7 @@ const ReservationForm = ({ bike, onSubmit }) => {
               compareAsc(date, formik.values.startDate) < 1
             }
             onChange={value => formik.setFieldValue('endDate', value)}
+            onBlur={formik.handleBlur}
             renderInput={params => (
               <TextField sx={{ width: '100%' }} {...params} />
             )}

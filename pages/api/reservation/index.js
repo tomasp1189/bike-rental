@@ -2,7 +2,6 @@ import { withApiAuthRequired } from '@auth0/nextjs-auth0';
 
 import reservationController from '../../../server/Reservation/controller';
 import errorHandler from '../../../server/errors/errorHandler';
-import isManager from '../../../server/lib/middleware/isManager';
 import dbConnect from '../../../server/lib/dbConnect';
 
 export default errorHandler(
@@ -15,7 +14,7 @@ export default errorHandler(
       case 'GET':
         return reservationController.all(req, res);
       case 'POST':
-        return isManager(reservationController.create)(req, res);
+        return reservationController.create(req, res);
       default:
         return res.status(400).json({ success: false });
     }

@@ -8,7 +8,7 @@ import { CircularProgress, Typography } from '@mui/material';
 import Reservation from '../server/Reservation/Reservation';
 import dbConnect from '../server/lib/dbConnect';
 import ReservationList from '../components/organisms/Reservation/ReservationList';
-import apiClient from '../helpers/apiClient';
+import apiClient from '../api/local';
 
 const ReservationPage = ({ reservations = [] }) => {
   const { data: pendingReservations, isValidating } = useSWR(

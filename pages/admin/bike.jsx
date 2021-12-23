@@ -5,13 +5,14 @@ import { CircularProgress, Typography } from '@mui/material';
 import useSWR from 'swr';
 import { add } from 'date-fns';
 
-import dbConnect from '../server/lib/dbConnect';
-import Filters from '../components/organisms/Filters';
-import BikeList from '../components/organisms/Bike/BikeList';
-import services from '../server/Bike/services';
-import apiClient from '../api/local';
+import dbConnect from '../../server/lib/dbConnect';
+import Filters from '../../components/organisms/Filters';
+import BikeList from '../../components/organisms/Bike/BikeList';
+import services from '../../server/Bike/services';
+import apiClient from '../../api/local';
+import withAuth from '../../components/hoc/withAuth';
 
-const Index = ({ bikes = [] }) => {
+const AdminBikePage = ({ bikes = [] }) => {
   const [query, setQuery] = useState('');
 
   const { data, mutate, isValidating } = useSWR(
@@ -82,8 +83,8 @@ export async function getServerSideProps() {
   return { props: { bikes } };
 }
 
-Index.propTypes = {
+AdminBikePage.propTypes = {
   bikes: PropTypes.arrayOf(PropTypes.object),
 };
 
-export default Index;
+export default withAuth(AdminBikePage);

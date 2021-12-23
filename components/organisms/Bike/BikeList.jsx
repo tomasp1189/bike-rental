@@ -5,7 +5,7 @@ import { Grid } from '@mui/material';
 import BikeCard from './BikeCard';
 import ReservationForm from '../Reservation/ReservationForm';
 import FormModal from '../../molecules/FormModal';
-import apiClient from '../../../helpers/apiClient';
+import apiClient from '../../../api/local';
 
 const BikeList = ({ bikes }) => {
   const [isVisible, setIsVisible] = useState(false);

@@ -7,7 +7,7 @@ import ReservationCard from './ReservationCard';
 import ReviewForm from './ReviewForm';
 import ConfirmationDialog from '../ConfirmationDialog';
 import FormModal from '../../molecules/FormModal';
-import apiClient from '../../../helpers/apiClient';
+import apiClient from '../../../api/local';
 
 const ReservationList = ({ reservations }) => {
   const [isVisible, setIsVisible] = useState(null);

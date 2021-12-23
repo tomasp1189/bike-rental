@@ -13,7 +13,7 @@ import useSWR from 'swr';
 
 import FiltersForm from './FiltersForm';
 import ConditionalWrapper from '../helpers/ConditionalWrapper';
-import apiClient from '../../helpers/apiClient';
+import apiClient from '../../api/local';
 
 const Filters = ({ onSubmit }) => {
   const theme = useTheme();

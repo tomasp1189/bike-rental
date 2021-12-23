@@ -9,9 +9,11 @@ import {
   Typography,
 } from '@mui/material';
 import { useUser } from '@auth0/nextjs-auth0';
+import { useRouter } from 'next/router';
 
 const BikeCard = ({ model, color, rating, onClickReserve }) => {
   const { user, error, isLoading } = useUser();
+  const router = useRouter();
 
   if (error) return <div>{error.message}</div>;
   return (
@@ -34,7 +36,11 @@ const BikeCard = ({ model, color, rating, onClickReserve }) => {
             Reserve
           </Button>
         ) : (
-          <Button size="small" color="primary">
+          <Button
+            size="small"
+            color="primary"
+            onClick={() => !isLoading && router.push('/api/auth/login')}
+          >
             {isLoading ? 'Loading...' : 'Login to make a reservation'}
           </Button>
         )}
