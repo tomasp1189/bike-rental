@@ -7,10 +7,20 @@ import {
   Select as SelectBase,
 } from '@mui/material';
 
-const Select = ({ name, id, label, value, onChange, options, sx }) => (
+const Select = ({
+  disabled,
+  name,
+  id,
+  label,
+  value,
+  onChange,
+  options,
+  sx,
+}) => (
   <FormControl sx={sx}>
     <InputLabel id={`${label}-select-helper-label`}>{label}</InputLabel>
     <SelectBase
+      disabled={disabled}
       labelId={`${label}-select-helper-label`}
       name={name}
       id={id}
@@ -31,6 +41,7 @@ const Select = ({ name, id, label, value, onChange, options, sx }) => (
 );
 
 Select.propTypes = {
+  disabled: PropTypes.bool,
   name: PropTypes.string,
   id: PropTypes.string,
   label: PropTypes.string,
