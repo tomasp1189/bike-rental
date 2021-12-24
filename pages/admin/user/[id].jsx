@@ -35,6 +35,7 @@ const ReservationPage = ({ reservations = [] }) => {
           reservations={pendingReservations}
           hideActions
           showStatus
+          emptyMessage="This user hasn't made any reservations yet."
         />
       )}
     </>

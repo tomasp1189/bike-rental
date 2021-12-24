@@ -9,7 +9,12 @@ import ConfirmationDialog from '../ConfirmationDialog';
 import FormModal from '../../molecules/FormModal';
 import apiClient from '../../../api/local';
 
-const ReservationList = ({ reservations, hideActions, showStatus }) => {
+const ReservationList = ({
+  reservations,
+  hideActions,
+  showStatus,
+  emptyMessage,
+}) => {
   const [isVisible, setIsVisible] = useState(null);
   const [addReviewIsVisible, setAddReviewIsVisible] = useState(null);
   const [selectedReservation, setSelectedReservation] = useState(null);
@@ -65,8 +70,12 @@ const ReservationList = ({ reservations, hideActions, showStatus }) => {
         ) : (
           <Grid item xs={4} sm={8} md={12}>
             <Typography>
-              You have no pending reservations,{' '}
-              <Link href="/bike">make your first one!</Link>
+              {emptyMessage || (
+                <span>
+                  You have no pending reservations,{' '}
+                  <Link href="/bike">make your first one!</Link>
+                </span>
+              )}
             </Typography>
           </Grid>
         )}
@@ -99,6 +108,7 @@ ReservationList.propTypes = {
   reservations: PropTypes.arrayOf(PropTypes.object),
   hideActions: PropTypes.bool,
   showStatus: PropTypes.bool,
+  emptyMessage: PropTypes.string,
 };
 
 export default ReservationList;
