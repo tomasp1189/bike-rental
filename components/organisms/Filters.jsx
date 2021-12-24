@@ -10,8 +10,6 @@ import {
   useTheme,
 } from '@mui/material';
 import useSWR from 'swr';
-import { useUser } from '@auth0/nextjs-auth0';
-import { useRouter } from 'next/router';
 
 import FiltersForm from './FiltersForm';
 import ConditionalWrapper from '../helpers/ConditionalWrapper';
@@ -19,8 +17,6 @@ import helpers from '../../api/helpers';
 
 const Filters = ({ onSubmit }) => {
   const theme = useTheme();
-  const { user } = useUser();
-  const router = useRouter();
   const [isVisible, setIsVisible] = useState(false);
 
   const matches = useMediaQuery(theme.breakpoints.up('md'));
@@ -35,10 +31,8 @@ const Filters = ({ onSubmit }) => {
     },
     [matches, onSubmit],
   );
-  const handleFilter = useCallback(() => {
-    if (!user) router.push('/api/auth/login');
-    else setIsVisible(prev => !prev);
-  }, [user, router]);
+
+  const handleFilter = () => setIsVisible(prev => !prev);
 
   const wrapper = useCallback(
     children => (
@@ -57,7 +51,7 @@ const Filters = ({ onSubmit }) => {
   return (
     <Box sx={{ my: 2 }}>
       <Button sx={{ mb: 1 }} variant="contained" onClick={handleFilter}>
-        {!user ? 'Login to filter' : 'Filter'}
+        Filter
       </Button>
       {/* use modal with portal on mobile */}
 
