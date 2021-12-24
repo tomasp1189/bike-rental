@@ -3,7 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withPageAuthRequired } from '@auth0/nextjs-auth0';
 import useSWR from 'swr';
-import { CircularProgress, Typography } from '@mui/material';
+import { Box, CircularProgress, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
 
 import Reservation from '../../../server/Reservation/Reservation';
@@ -25,9 +25,14 @@ const ReservationPage = ({ reservations = [] }) => {
 
   return (
     <>
-      <Typography component="h1" variant="h4" mb={4}>
-        User Reservations
-      </Typography>
+      <Box sx={{ mb: 4 }}>
+        <Typography component="h1" variant="h4">
+          User Reservations
+        </Typography>
+        <Typography variant="caption" color="GrayText">
+          {router.query.id}
+        </Typography>
+      </Box>
       {!pendingReservations || isValidating ? (
         <CircularProgress />
       ) : (
