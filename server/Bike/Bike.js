@@ -43,6 +43,7 @@ const BikeSchema = new mongoose.Schema(
       required: [true, "Please provide the bike's color"],
       maxlength: [20, 'Color cannot be more than 60 characters'],
     },
+    // TODO: include city name as well
     location: {
       type: PointSchema,
       required: true,

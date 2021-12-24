@@ -10,14 +10,12 @@ const LocationAutocomplete = ({
   error,
   label,
   onPlaceSelected,
+  onBlur,
   value,
 }) => {
-  const [tempValue, setTempValue] = useState(
-    () => value?.formatted_address || '',
-  );
-
+  const [tempValue, setTempValue] = useState(value?.formatted_address || '');
   // used to reset the controlled TextField component value when form is cleared
-  useEffect(() => !value && setTempValue(''), [value]);
+  useEffect(() => setTempValue(value?.formatted_address || ''), [value]);
 
   const handleOnPlaceSelect = place => {
     if (onPlaceSelected) onPlaceSelected(place);
@@ -25,7 +23,7 @@ const LocationAutocomplete = ({
   };
 
   const { ref: materialRef } = usePlacesWidget({
-    apiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
+    // apiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
     onPlaceSelected: handleOnPlaceSelect,
     options: {},
   });
@@ -41,12 +39,14 @@ const LocationAutocomplete = ({
       name={name}
       id={id}
       onChange={event => setTempValue(event.target.value)}
+      onBlur={onBlur}
       value={tempValue}
     />
   );
 };
 
 LocationAutocomplete.propTypes = {
+  onBlur: PropTypes.func,
   onPlaceSelected: PropTypes.func,
   name: PropTypes.string,
   id: PropTypes.string,
@@ -58,8 +58,8 @@ LocationAutocomplete.propTypes = {
     formatted_address: PropTypes.string,
     geometry: PropTypes.shape({
       location: PropTypes.shape({
-        lat: PropTypes.number,
-        lng: PropTypes.number,
+        lat: PropTypes.func,
+        lng: PropTypes.func,
       }),
     }),
     place_id: PropTypes.string,

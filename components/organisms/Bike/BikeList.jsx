@@ -5,14 +5,14 @@ import { Grid } from '@mui/material';
 import BikeCard from './BikeCard';
 import ReservationForm from '../Reservation/ReservationForm';
 import FormModal from '../../molecules/FormModal';
-import apiClient from '../../../api/local';
+import reservationApi from '../../../api/reservationApi';
 
 const BikeList = ({ bikes }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [selectedBike, setSelectedBike] = useState(null);
 
   const handleOnSubmitReservation = values => {
-    apiClient.postReservation(values, () => {
+    reservationApi.createReservation(values, () => {
       setIsVisible(false);
       setSelectedBike(null);
     });
