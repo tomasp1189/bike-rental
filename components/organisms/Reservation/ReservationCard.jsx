@@ -17,8 +17,11 @@ const ReservationCard = ({
   id,
   startDate,
   endDate,
+  isCancelled,
   onClickCancel,
   onClickAddReview,
+  hideActions,
+  showStatus,
 }) => {
   const { user, isLoading } = useUser();
 
@@ -74,6 +77,17 @@ const ReservationCard = ({
     onClickCancel,
   ]);
 
+  const renderStatus = useCallback(() => {
+    let status = 'pending';
+    if (isCancelled) status = 'cancelled';
+    if (isCompletedReservation) status = 'completed';
+    if (hasReviewed) status = 'reviewed';
+    return (
+      <Typography variant="body2">
+        <b>Status:</b> {status}
+      </Typography>
+    );
+  });
   return (
     <Card sx={{ width: '100%' }}>
       <CardContent>
@@ -87,6 +101,7 @@ const ReservationCard = ({
         <Typography variant="body2">
           <b>End date:</b> {format(new Date(endDate), 'EE, dd MMM yyyy')}
         </Typography>
+        {showStatus && renderStatus()}
 
         <Box mt={2}>
           <Typography gutterBottom color="GrayText">
@@ -101,7 +116,8 @@ const ReservationCard = ({
           </Typography>
         </Box>
       </CardContent>
-      <CardActions sx={{ p: 2 }}>{renderAction()}</CardActions>
+
+      <CardActions sx={{ p: 2 }}>{!hideActions && renderAction()}</CardActions>
     </Card>
   );
 };
@@ -110,6 +126,7 @@ ReservationCard.propTypes = {
   id: PropTypes.string,
   startDate: PropTypes.string,
   endDate: PropTypes.string,
+  isCancelled: PropTypes.bool,
   bike: PropTypes.shape({
     model: PropTypes.string,
     color: PropTypes.string,
@@ -120,6 +137,8 @@ ReservationCard.propTypes = {
   }),
   onClickCancel: PropTypes.func,
   onClickAddReview: PropTypes.func,
+  hideActions: PropTypes.bool,
+  showStatus: PropTypes.bool,
 };
 
 export default ReservationCard;
