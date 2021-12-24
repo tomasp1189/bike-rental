@@ -14,6 +14,7 @@ const ReservationList = ({
   hideActions,
   showStatus,
   emptyMessage,
+  callback,
 }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [addReviewIsVisible, setAddReviewIsVisible] = useState(false);
@@ -26,6 +27,7 @@ const ReservationList = ({
     reservationApi.cancelReservation(selectedReservation._id, () => {
       setIsVisible(false);
       setSelectedReservation(null);
+      if (callback) callback();
     });
   };
   const handleOnClickCancel = reservation => () => {
@@ -40,6 +42,7 @@ const ReservationList = ({
     reservationApi.addReview({ id: values.bike, rating: values.rating }, () => {
       setAddReviewIsVisible(false);
       setSelectedReservation(null);
+      if (callback) callback();
     });
   };
 
@@ -50,7 +53,6 @@ const ReservationList = ({
         spacing={{ xs: 2, md: 3 }}
         columns={{ xs: 4, sm: 8, md: 12 }}
       >
-        {/* Create a card for each pet */}
         {reservations?.length > 0 ? (
           reservations.map(reservation => (
             <Grid item key={reservation._id} xs={4} sm={4} md={4}>
@@ -109,6 +111,7 @@ ReservationList.propTypes = {
   hideActions: PropTypes.bool,
   showStatus: PropTypes.bool,
   emptyMessage: PropTypes.string,
+  callback: PropTypes.func,
 };
 
 export default ReservationList;

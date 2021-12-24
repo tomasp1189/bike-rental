@@ -2,7 +2,6 @@ import { getSession } from '@auth0/nextjs-auth0';
 
 const Index = () => null;
 
-/* Retrieves pet(s) data from mongodb database */
 export async function getServerSideProps({ req, res }) {
   /* find all the data in our database */
 

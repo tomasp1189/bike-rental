@@ -11,19 +11,22 @@ import ReservationList from '../components/organisms/Reservation/ReservationList
 import helpers from '../api/helpers';
 
 const ReservationPage = ({ reservations = [] }) => {
-  const { data: pendingReservations, isValidating } = useSWR(
-    '/api/reservation?cancelled=false&pending=true',
+  const {
+    data: pendingReservations,
+    isValidating,
+    mutate,
+  } = useSWR('/api/reservation?cancelled=false&pending=true', helpers.fetcher, {
+    fallbackData: reservations,
+  });
+  const {
+    data: completedReservations,
+    isValidating: isValidatingCompleted,
+    mutate: mutateCompleted,
+  } = useSWR(
+    '/api/reservation?cancelled=false&pending=false',
     helpers.fetcher,
-    {
-      fallbackData: reservations,
-    },
+    {},
   );
-  const { data: completedReservations, isValidating: isValidatingCompleted } =
-    useSWR(
-      '/api/reservation?cancelled=false&pending=false',
-      helpers.fetcher,
-      {},
-    );
 
   return (
     <>
@@ -33,7 +36,7 @@ const ReservationPage = ({ reservations = [] }) => {
       {!pendingReservations || isValidating ? (
         <CircularProgress />
       ) : (
-        <ReservationList reservations={pendingReservations} />
+        <ReservationList reservations={pendingReservations} callback={mutate} />
       )}
       <Typography component="h2" variant="h4" mt={4} mb={4}>
         Completed Reservations
@@ -41,13 +44,16 @@ const ReservationPage = ({ reservations = [] }) => {
       {!completedReservations || isValidatingCompleted ? (
         <CircularProgress />
       ) : (
-        <ReservationList reservations={completedReservations} />
+        <ReservationList
+          reservations={completedReservations}
+          emptyMessage="You dont have any completed reservations."
+          callback={mutateCompleted}
+        />
       )}
     </>
   );
 };
 
-/* Retrieves pet(s) data from mongodb database */
 export const getServerSideProps = withPageAuthRequired({
   getServerSideProps: async function getServerSideProps() {
     /* find all the data in our database */

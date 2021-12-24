@@ -7,7 +7,6 @@ import UserCard from './UserCard';
 
 const UserList = ({ reservations, showStatus, emptyMessage }) => (
   <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
-    {/* Create a card for each pet */}
     {reservations?.length > 0 ? (
       reservations.map(reservation => (
         <Grid item key={reservation._id} xs={4} sm={4} md={4}>

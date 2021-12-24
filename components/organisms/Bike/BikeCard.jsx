@@ -22,7 +22,7 @@ const BikeCard = ({ model, color, rating, onClickReserve }) => {
         <Typography gutterBottom variant="h5" component="h2" mb={0}>
           {model}
         </Typography>
-        <Rating value={rating} size="small" sx={{ mb: 2 }} />
+        <Rating value={rating} size="small" sx={{ mb: 2 }} readOnly/>
         <Typography>Color: {color}</Typography>
       </CardContent>
       <CardActions sx={{ p: 2 }}>

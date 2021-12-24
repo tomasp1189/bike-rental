@@ -26,7 +26,7 @@ const MyApp = ({ Component, pageProps }) => (
         rel="stylesheet"
         href="https://fonts.googleapis.com/icon?family=Material+Icons"
       />
-      <title>Pet Care App</title>
+      <title>Bike Rental App</title>
     </Head>
     <Script
       type="text/javascript"

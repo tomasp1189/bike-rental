@@ -56,14 +56,12 @@ const Index = ({ bikes = [] }) => {
         Available Bikes
       </Typography>
       <Filters onSubmit={handleFilterSubmit} />
-      {!data || isValidating ? <CircularProgress /> : <BikeList bikes={data} />}
+      {!data || isValidating ? <CircularProgress /> : <BikeList bikes={data} callback={mutate} />}
     </>
   );
 };
 
-/* Retrieves pet(s) data from mongodb database */
 export async function getServerSideProps() {
-  /* find all the data in our database */
   await dbConnect();
 
   const startDate = new Date();

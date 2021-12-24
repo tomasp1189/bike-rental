@@ -30,15 +30,11 @@ const PointSchema = new mongoose.Schema({
 const BikeSchema = new mongoose.Schema(
   {
     model: {
-      /* The name of this pet */
-
       type: String,
       required: [true, 'Please provide a model for this bike.'],
       maxlength: [20, 'model cannot be more than 60 characters'],
     },
     color: {
-      /* The owner of this pet */
-
       type: String,
       required: [true, "Please provide the bike's color"],
       maxlength: [20, 'Color cannot be more than 60 characters'],
@@ -51,7 +47,6 @@ const BikeSchema = new mongoose.Schema(
     },
     // subdocument
     reviews: {
-      /* Pet's age, if applicable */
       type: [ReviewSchema],
     },
     averageRating: {

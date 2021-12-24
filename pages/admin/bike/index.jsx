@@ -200,13 +200,8 @@ const AdminBikePage = ({ users = [] }) => {
   );
 };
 
-/* Retrieves pet(s) data from mongodb database */
 export const getServerSideProps = withPageAuthRequired({
   getServerSideProps: async function getServerSideProps() {
-    /* find all the data in our database */
-
-    // const users = await auth0.all(session.accessToken);
-
     return { props: { users: [] } };
   },
 });

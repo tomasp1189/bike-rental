@@ -126,12 +126,7 @@ const AdminUsersPage = ({ users = [] }) => {
       mutate();
     };
     if (selectedUser?.id) userApi.updateUser(values, callback);
-    else
-      userApi.postUser(values, () => {
-        setSelectedUser(null);
-        setFormIsVisible(false);
-        mutate();
-      });
+    else userApi.createUser(values, callback);
   };
   return (
     <>

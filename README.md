@@ -56,39 +56,48 @@ Alternatively, you can deploy using our template by clicking on the Deploy butto
 
 ## Design
 
-I've decided to use [Atomic Design](https://atomicdesign.bradfrost.com/chapter-2/) as a guide for folder and components structure because it was already provided this way in the designs.
+I've decided to use [Atomic Design](https://atomicdesign.bradfrost.com/chapter-2/) as a guide for folder and components structure.
 
 ## What now?
 
-- [ ] BackEnd
-  - [ ] Setup Auth0
+- [x] BackEnd
+  - [x] Setup Auth0
     - [x] Initial Setup + SDK integration
-    - [ ] Add Roles and rule to attach roles
-    - [ ] Create Role validating middleware
+    - [x] Add Roles and rule to attach roles
+    - [x] Create Role validating middleware
   - [x] Setup DB
-  - [ ] Bike
+  - [x] Bike
     - [x] CRUD
-    - [ ] Search with filters + reservation dates
-  - [ ] Reservations
-    - [ ] CRUD
-    - [ ] Cancellation with isOwner validation
-  - [ ] Reviews
-    - [ ] CRUD
-    - [ ] Creation with isOwner of reservation validation
+    - [x] Search with filters + reservation dates
+  - [x] Reservations
+    - [x] CRUD
+    - [x] Cancellation with isOwner validation
+  - [x] Reviews
+    - [x] CRUD
+    - [x] Creation with isOwner of reservation validation
   - [x] Centralized Error Handling
   - [x] Postman integration
-- [ ] FrontEnd
-  - [ ] Material UI
-  - [ ] Auth
+- [x] FrontEnd
+  - [x] Material UI
+  - [x] Auth
     - [x] Sign Up + Login
-    - [ ] Route limitation by authentication and role validation
-  - [ ] User Views
-    - [ ] Bike List
-    - [ ] Reservation Form
-    - [ ] Reservation Cancellation
-    - [ ] Review Form
-  - [ ] Admin Views
-    - [ ] User list
-    - [ ] User Create form
-    - [ ] User Update form
-    - [ ] Bike list
+    - [x] Route limitation by authentication and role validation
+  - [x] User Views
+    - [x] Bike List
+    - [x] Reservation Form
+    - [x] Reservation Cancellation
+    - [x] Review Form
+  - [x] Admin Views
+    - [x] User list
+    - [x] User Create form
+    - [x] User Update form
+    - [x] Bike list
+
+
+## Instructional Videos
+
+- [Tech Stack and design decisions](https://www.loom.com/share/d32c4424b23c4f01851762e0576d2471)
+- Admin Demo
+  - [Users](https://www.loom.com/share/3631adab28fa4ed69d37a8c934a5ca03)
+  - [Bikes](https://www.loom.com/share/f1fe70cc7036485a86b5175b495807c4)
+- [User Demo](https://www.loom.com/share/01ef4cb245ff4d96bcf2ced9e6c9b7ea)

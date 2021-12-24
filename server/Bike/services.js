@@ -13,7 +13,7 @@ const searchAvailableBikes = async (
   const datesQuery = buildDatesQuery(startDate, endDate);
   const reservations = await Reservation.find(
     {
-      $and: [{ cancelled: false }, datesQuery],
+      $and: [{ isCancelled: false }, datesQuery],
     },
     'bike',
   );
