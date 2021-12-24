@@ -110,7 +110,12 @@ const ReservationCard = ({
           <Typography color="GrayText" variant="body2">
             Model: {bike?.model}
           </Typography>
-          <Rating value={bike?.averageRating} size="small" sx={{ mb: 0 }} readOnly/>
+          <Rating
+            value={bike?.averageRating}
+            size="small"
+            sx={{ mb: 0 }}
+            readOnly
+          />
           <Typography color="GrayText" variant="body2">
             Color: {bike?.color}
           </Typography>
