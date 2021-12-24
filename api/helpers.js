@@ -1,6 +1,11 @@
 const fetcher = url =>
   fetch(url)
-    .then(res => res.json())
+    .then(res => {
+      if (!res.ok) {
+        throw new Error(res.statusText);
+      }
+      return res.json();
+    })
     .then(json => json.data);
 
 const geocodeLatLng = async (lat, lng) => {

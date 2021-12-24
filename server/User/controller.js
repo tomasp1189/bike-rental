@@ -8,11 +8,12 @@ const ROLES = ['rol_3df3Oew6DebXJgTK', 'rol_hEW39wdBWRpaxw0u'];
 const contentType = 'application/json';
 
 const create = async (req, res) => {
+  const accessToken = await services.requestToken();
   const config = {
     method: 'POST',
     url: `${process.env.AUTH0_ISSUER_BASE_URL}/api/v2/users`,
     headers: {
-      Authorization: `Bearer ${process.env.AUTH0_ACCESS_TOKEN}`,
+      Authorization: `Bearer ${accessToken}`,
       'content-type': contentType,
     },
     data: {
@@ -32,7 +33,7 @@ const create = async (req, res) => {
   const configRoles = {
     method: 'POST',
     url: `${process.env.AUTH0_ISSUER_BASE_URL}/api/v2/users/${response.data.user_id}/roles`,
-    headers: { Authorization: `Bearer ${process.env.AUTH0_ACCESS_TOKEN}` },
+    headers: { Authorization: `Bearer ${accessToken}` },
     data: {
       // if no role is provided or it isn't in the list of admited roles I default to User
       roles: [role],
@@ -46,46 +47,53 @@ const create = async (req, res) => {
     .json({ success: true, data: response.data });
 };
 const update = async (req, res) => {
-  const data = {};
-  if (req.body.name) data.given_name = req.body.name;
-  if (req.body.lastName) data.family_name = req.body.lastName;
-  if (req.body.email) data.email = req.body.email;
+  try {
+    const accessToken = await services.requestToken();
+    const data = {};
+    if (req.body.name) data.given_name = req.body.name;
+    if (req.body.lastName) data.family_name = req.body.lastName;
+    if (req.body.email) data.email = req.body.email;
 
-  const config = {
-    method: 'PATCH',
-    url: `${process.env.AUTH0_ISSUER_BASE_URL}/api/v2/users/${req.query.id}`,
-    headers: {
-      Authorization: `Bearer ${process.env.AUTH0_ACCESS_TOKEN}`,
-      'content-type': contentType,
-    },
-    data,
-  };
+    const config = {
+      method: 'PATCH',
+      url: `${process.env.AUTH0_ISSUER_BASE_URL}/api/v2/users/${req.query.id}`,
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        'content-type': contentType,
+      },
+      data,
+    };
 
-  const response = await axios(config);
+    const response = await axios(config);
 
-  // TODO: Add role update. For now, I will assume roles can not be modified.
-  // const role = ROLE.includes(req.body.role) && req.body.role;
-  // if (role) {
-  //   const configRoles = {
-  //     method: 'POST',
-  //     url: `${process.env.AUTH0_ISSUER_BASE_URL}/api/v2/users/${req.query.id}/roles`,
-  //     headers: { Authorization: `Bearer ${process.env.AUTH0_ACCESS_TOKEN}` },
-  //     data: {
-  //       // if no role is provided or it isn't in the list of admited roles I default to User
-  //       roles: [role],
-  //     },
-  //   };
+    // TODO: Add role update. For now, I will assume roles can not be modified.
+    // const role = ROLE.includes(req.body.role) && req.body.role;
+    // if (role) {
+    //   const configRoles = {
+    //     method: 'POST',
+    //     url: `${process.env.AUTH0_ISSUER_BASE_URL}/api/v2/users/${req.query.id}/roles`,
+    //     headers: { Authorization: `Bearer ${process.env.AUTH0_ACCESS_TOKEN}` },
+    //     data: {
+    //       // if no role is provided or it isn't in the list of admited roles I default to User
+    //       roles: [role],
+    //     },
+    //   };
 
-  //   await axios(configRoles);
-  // }
-  res.status(httpStatusCodes.OK).json({ success: true, data: response.data });
+    //   await axios(configRoles);
+    // }
+    res.status(httpStatusCodes.OK).json({ success: true, data: response.data });
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
 };
 const deleteUser = async (req, res) => {
+  const accessToken = await services.requestToken();
   const config = {
     method: 'DELETE',
     url: `${process.env.AUTH0_ISSUER_BASE_URL}/api/v2/users/${req.query.id}`,
     headers: {
-      Authorization: `Bearer ${process.env.AUTH0_ACCESS_TOKEN}`,
+      Authorization: `Bearer ${accessToken}`,
       'content-type': contentType,
     },
   };

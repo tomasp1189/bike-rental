@@ -1,5 +1,5 @@
 /* eslint-disable no-underscore-dangle */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import {
   Box,
@@ -14,6 +14,7 @@ import { DataGrid } from '@mui/x-data-grid';
 import useSWR from 'swr';
 import { withPageAuthRequired } from '@auth0/nextjs-auth0';
 import { useRouter } from 'next/router';
+import { toast } from 'react-toastify';
 
 import withAuth from '../../../components/hoc/withAuth';
 import FormModal from '../../../components/molecules/FormModal';
@@ -83,7 +84,11 @@ const AdminUsersPage = ({ users = [] }) => {
     },
   );
 
-  if (error) return <div>{error.message}</div>;
+  useEffect(() => {
+    if (error) {
+      toast.error(error.message, { position: toast.POSITION.TOP_RIGHT });
+    }
+  }, [error]);
 
   const handleOnAdd = () => {
     setFormIsVisible(true);
