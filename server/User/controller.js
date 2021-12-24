@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 import { httpStatusCodes } from '../errors/httpStatusCodes';
+import services from './services';
 
 // errors are handled in errorHandler middleware. No need for try/catch blocks
 const ROLES = ['rol_3df3Oew6DebXJgTK', 'rol_hEW39wdBWRpaxw0u'];
@@ -95,13 +96,7 @@ const deleteUser = async (req, res) => {
   res.status(httpStatusCodes.OK).json({ success: true });
 };
 const all = async (req, res) => {
-  const config = {
-    method: 'GET',
-    url: `${process.env.AUTH0_ISSUER_BASE_URL}/api/v2/users`,
-    headers: { Authorization: `Bearer ${process.env.AUTH0_ACCESS_TOKEN}` },
-  };
-
-  const response = await axios(config);
+  const response = services.getAllUsers();
 
   return res
     .status(httpStatusCodes.OK)

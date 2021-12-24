@@ -23,8 +23,9 @@ import ConfirmationDialog from '../../../components/organisms/ConfirmationDialog
 import helpers from '../../../api/helpers';
 
 const createColumns = (onView, onUpdate, onDelete) => [
-  { field: 'model', headerName: 'Model', minWidth: 200, flex: 1 },
-  { field: 'color', headerName: 'Color', minWidth: 200, flex: 1 },
+  { field: 'id', headerName: 'ID', minWidth: 200, flex: 1 },
+  { field: 'model', headerName: 'Model', minWidth: 150, flex: 1 },
+  { field: 'color', headerName: 'Color', minWidth: 150, flex: 1 },
   {
     field: 'averageRating',
     headerName: 'Average Rating',
@@ -33,7 +34,7 @@ const createColumns = (onView, onUpdate, onDelete) => [
   },
   {
     field: 'reviews',
-    headerName: 'Number of reviews',
+    headerName: '# of reviews',
     minWidth: 80,
     flex: 1,
     valueGetter: params => params.row?.reviews?.length || 0,
@@ -101,7 +102,7 @@ const AdminBikePage = ({ users = [] }) => {
     setFormIsVisible(true);
   };
   const handleOnView = params => () => {
-    router.push(`/admin/user/${params.id}/`);
+    router.push(`/admin/bike/${params.id}/`);
   };
   const handleOnUpdate = params => () => {
     setSelectedBike(params?.row);
@@ -191,7 +192,7 @@ const AdminBikePage = ({ users = [] }) => {
       <ConfirmationDialog
         open={deleteIsVisible}
         title="Delete User"
-        body={`Are you sure you want to delete user ${selectedBike?.id}?`}
+        body={`Are you sure you want to delete bike ${selectedBike?.id}?`}
         onClickConfirm={handleOnConfirmDelete}
         onClickCancel={handleOnCloseConfirmation}
       />

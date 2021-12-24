@@ -2,40 +2,33 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withPageAuthRequired } from '@auth0/nextjs-auth0';
-import useSWR from 'swr';
-import { CircularProgress, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
 
 import Reservation from '../../../server/Reservation/Reservation';
 import dbConnect from '../../../server/lib/dbConnect';
-import ReservationList from '../../../components/organisms/Reservation/ReservationList';
-import helpers from '../../../api/helpers';
+import ReservationList from '../../../components/organisms/User/UserList';
+import services from '../../../server/User/services';
 
 const ReservationPage = ({ reservations = [] }) => {
   const router = useRouter();
-  console.log(router.query.id);
-  const { data: pendingReservations, isValidating } = useSWR(
-    `/api/user/${router.query.id}/`,
-    helpers.fetcher,
-    {
-      fallbackData: reservations,
-    },
-  );
 
   return (
     <>
-      <Typography component="h1" variant="h4" mb={4}>
-        User Reservations
-      </Typography>
-      {!pendingReservations || isValidating ? (
-        <CircularProgress />
-      ) : (
-        <ReservationList
-          reservations={pendingReservations}
-          hideActions
-          showStatus
-        />
-      )}
+      <Box sx={{ mb: 4 }}>
+        <Typography component="h1" variant="h4">
+          Bike User List
+        </Typography>
+        <Typography variant="caption" color="GrayText">
+          {router.query.id}
+        </Typography>
+      </Box>
+      <ReservationList
+        reservations={reservations}
+        hideActions
+        showStatus
+        emptyMessage="This bike has never been rented!"
+      />
     </>
   );
 };
@@ -44,17 +37,28 @@ export const getServerSideProps = withPageAuthRequired({
   getServerSideProps: async function getServerSideProps({ query }) {
     /* find all the data in our database */
     await dbConnect();
+    // fetch all users
+    const usersResponse = await services.getAllUsers();
+    const users = usersResponse.data;
+    const userIds = usersResponse.data.map(user => user.user_id);
+    // fetch all reservations for specific bike
     const result = await Reservation.find({
       isCancelled: false,
-      ownerId: query?.id,
+      bike: query?.id,
     }).populate('bike');
-    const reservations = result.map(doc => {
-      const reservation = JSON.parse(JSON.stringify(doc));
-      //  doc.toObject();
-      reservation._id = reservation._id.toString();
-      return reservation;
-    });
-    console.log(result);
+    // build reservation array by mapping to users by ownerId
+    const reservations = result
+      .filter(res => userIds.includes(res.ownerId))
+      .map(doc => {
+        const reservation = JSON.parse(JSON.stringify(doc));
+        //  doc.toObject();
+        reservation._id = reservation._id.toString();
+        reservation.owner = users.find(
+          user => user.user_id === reservation.ownerId,
+        );
+        return reservation;
+      });
+
     return { props: { reservations } };
   },
 });
