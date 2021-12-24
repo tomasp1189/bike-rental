@@ -32,7 +32,6 @@ const BikeForm = ({ id, model, color, location, onSubmit, onCancel }) => {
         location?.coordinates[1],
         location?.coordinates[0],
       );
-      console.log('bikeLocation', bikeLocation);
       if (bikeLocation) formik.setFieldValue('location', bikeLocation);
     };
 

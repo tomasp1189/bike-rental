@@ -27,7 +27,7 @@ const searchAvailableBikes = async (
   const ratingQuery = rating
     ? { averageRating: { $gte: Number.parseFloat(rating) } }
     : {};
-  console.log(ratingQuery);
+
   const modelQuery = model ? { model: { $regex: new RegExp(model, 'i') } } : {};
   const colorQuery = color ? { color: { $regex: new RegExp(color, 'i') } } : {};
   const bikes = await Bike.find({

@@ -28,6 +28,8 @@ const update = async (req, res) => {
   // }
   return res.status(httpStatusCodes.OK).json({ success: true, data: bike });
 };
+
+// TODO: Check existing reservations for this bike, send warning message.
 const deleteBike = async (req, res) => {
   const deletedBike = await Bike.deleteOne({ _id: req.query.id });
   return res

@@ -61,7 +61,7 @@ export const getServerSideProps = withPageAuthRequired({
       reservation._id = reservation._id.toString();
       return reservation;
     });
-    console.log(result);
+
     return { props: { reservations } };
   },
 });
