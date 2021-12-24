@@ -96,7 +96,7 @@ const deleteUser = async (req, res) => {
   res.status(httpStatusCodes.OK).json({ success: true });
 };
 const all = async (req, res) => {
-  const response = services.getAllUsers();
+  const response = await services.getAllUsers();
 
   return res
     .status(httpStatusCodes.OK)
