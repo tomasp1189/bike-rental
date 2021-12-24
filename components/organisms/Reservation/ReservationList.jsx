@@ -7,7 +7,7 @@ import ReservationCard from './ReservationCard';
 import ReviewForm from './ReviewForm';
 import ConfirmationDialog from '../ConfirmationDialog';
 import FormModal from '../../molecules/FormModal';
-import apiClient from '../../../api/local';
+import reservationApi from '../../../api/reservationApi';
 
 const ReservationList = ({
   reservations,
@@ -15,15 +15,15 @@ const ReservationList = ({
   showStatus,
   emptyMessage,
 }) => {
-  const [isVisible, setIsVisible] = useState(null);
-  const [addReviewIsVisible, setAddReviewIsVisible] = useState(null);
+  const [isVisible, setIsVisible] = useState(false);
+  const [addReviewIsVisible, setAddReviewIsVisible] = useState(false);
   const [selectedReservation, setSelectedReservation] = useState(null);
 
   const handleOnClose = () => {
     setIsVisible(false);
   };
   const handleOnClickConfirm = () => {
-    apiClient.cancelReservation(selectedReservation._id, () => {
+    reservationApi.cancelReservation(selectedReservation._id, () => {
       setIsVisible(false);
       setSelectedReservation(null);
     });
@@ -37,7 +37,7 @@ const ReservationList = ({
     setAddReviewIsVisible(true);
   };
   const handleOnClickSubmitReview = values => {
-    apiClient.addReview({ id: values.bike, rating: values.rating }, () => {
+    reservationApi.addReview({ id: values.bike, rating: values.rating }, () => {
       setAddReviewIsVisible(false);
       setSelectedReservation(null);
     });
@@ -73,7 +73,7 @@ const ReservationList = ({
               {emptyMessage || (
                 <span>
                   You have no pending reservations,{' '}
-                  <Link href="/bike">make your first one!</Link>
+                  <Link href="/bike">make one!</Link>
                 </span>
               )}
             </Typography>

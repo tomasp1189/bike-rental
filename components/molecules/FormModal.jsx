@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Modal, Paper, Typography } from '@mui/material';
 
-const FormModal = ({ children, open, onClose, title }) => (
+const FormModal = ({ children, open = false, onClose, title }) => (
   <Modal sx={{ px: 2, py: 4 }} open={open} onClose={onClose}>
     <Paper
       sx={{

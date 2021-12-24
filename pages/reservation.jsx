@@ -8,12 +8,12 @@ import { CircularProgress, Typography } from '@mui/material';
 import Reservation from '../server/Reservation/Reservation';
 import dbConnect from '../server/lib/dbConnect';
 import ReservationList from '../components/organisms/Reservation/ReservationList';
-import apiClient from '../api/local';
+import helpers from '../api/helpers';
 
 const ReservationPage = ({ reservations = [] }) => {
   const { data: pendingReservations, isValidating } = useSWR(
     '/api/reservation?cancelled=false&pending=true',
-    apiClient.fetcher,
+    helpers.fetcher,
     {
       fallbackData: reservations,
     },
@@ -21,7 +21,7 @@ const ReservationPage = ({ reservations = [] }) => {
   const { data: completedReservations, isValidating: isValidatingCompleted } =
     useSWR(
       '/api/reservation?cancelled=false&pending=false',
-      apiClient.fetcher,
+      helpers.fetcher,
       {},
     );
 

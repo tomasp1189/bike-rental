@@ -9,7 +9,7 @@ import dbConnect from '../../server/lib/dbConnect';
 import Filters from '../../components/organisms/Filters';
 import BikeList from '../../components/organisms/Bike/BikeList';
 import services from '../../server/Bike/services';
-import apiClient from '../../api/local';
+import apiClient from '../../api/reservationApi';
 import withAuth from '../../components/hoc/withAuth';
 
 const AdminBikePage = ({ bikes = [] }) => {

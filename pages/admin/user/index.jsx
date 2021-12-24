@@ -1,17 +1,26 @@
 /* eslint-disable no-underscore-dangle */
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Box, Button, CircularProgress, Typography } from '@mui/material';
+import {
+  Box,
+  Button,
+  CircularProgress,
+  IconButton,
+  Typography,
+} from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
+import { DataGrid } from '@mui/x-data-grid';
 import useSWR from 'swr';
 import { withPageAuthRequired } from '@auth0/nextjs-auth0';
-import { DataGrid } from '@mui/x-data-grid';
 import { useRouter } from 'next/router';
 
-import apiClient from '../../../api/local';
 import withAuth from '../../../components/hoc/withAuth';
 import FormModal from '../../../components/molecules/FormModal';
 import UserForm from '../../../components/organisms/User/UserForm';
 import ConfirmationDialog from '../../../components/organisms/ConfirmationDialog';
+import helpers from '../../../api/helpers';
+import userApi from '../../../api/userApi';
 
 const createColumns = (onView, onUpdate, onDelete) => [
   { field: 'user_id', headerName: 'ID', minWidth: 200, flex: 1 },
@@ -20,8 +29,8 @@ const createColumns = (onView, onUpdate, onDelete) => [
   { field: 'family_name', headerName: 'Last name', minWidth: 150, flex: 1 },
   {
     field: 'actions',
-    headerName: 'Action',
-    minWidth: 200,
+    headerName: 'Actions',
+    minWidth: 150,
     flex: 1,
     renderCell: params => (
       <>
@@ -34,24 +43,26 @@ const createColumns = (onView, onUpdate, onDelete) => [
         >
           View
         </Button>
-        <Button
+        <IconButton
+          aria-label="update"
           variant="contained"
           color="primary"
           size="small"
-          style={{ marginLeft: 16 }}
+          sx={{ ml: 2 }}
           onClick={onUpdate(params)}
         >
-          Update
-        </Button>
-        <Button
+          <EditIcon />
+        </IconButton>
+        <IconButton
+          aria-label="delete"
           variant="contained"
           color="primary"
           size="small"
-          style={{ marginLeft: 16 }}
+          sx={{ ml: 2 }}
           onClick={onDelete(params)}
         >
-          Delete
-        </Button>
+          <DeleteIcon />
+        </IconButton>
       </>
     ),
   },
@@ -66,14 +77,13 @@ const AdminUsersPage = ({ users = [] }) => {
 
   const { data, mutate, isValidating, error } = useSWR(
     '/api/user/',
-    apiClient.fetcher,
+    helpers.fetcher,
     {
       fallbackData: users,
     },
   );
 
-  console.log(data);
-  if (error) return <p>error</p>;
+  if (error) return <div>{error.message}</div>;
 
   const handleOnAdd = () => {
     setFormIsVisible(true);
@@ -98,7 +108,7 @@ const AdminUsersPage = ({ users = [] }) => {
     setDeleteIsVisible(false);
   };
   const handleOnConfirmDelete = () => {
-    apiClient.deleteUser(selectedUser?.id, () => {
+    userApi.deleteUser(selectedUser?.id, () => {
       setSelectedUser(null);
       setDeleteIsVisible(false);
       mutate();
@@ -110,9 +120,9 @@ const AdminUsersPage = ({ users = [] }) => {
       setFormIsVisible(false);
       mutate();
     };
-    if (selectedUser?.id) apiClient.updateUser(values, callback);
+    if (selectedUser?.id) userApi.updateUser(values, callback);
     else
-      apiClient.postUser(values, () => {
+      userApi.postUser(values, () => {
         setSelectedUser(null);
         setFormIsVisible(false);
         mutate();

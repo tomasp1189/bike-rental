@@ -9,7 +9,7 @@ import { useRouter } from 'next/router';
 import Reservation from '../../../server/Reservation/Reservation';
 import dbConnect from '../../../server/lib/dbConnect';
 import ReservationList from '../../../components/organisms/Reservation/ReservationList';
-import apiClient from '../../../api/local';
+import helpers from '../../../api/helpers';
 
 // TODO: Add user details in page
 const ReservationPage = ({ reservations = [] }) => {
@@ -17,7 +17,7 @@ const ReservationPage = ({ reservations = [] }) => {
 
   const { data: pendingReservations, isValidating } = useSWR(
     `/api/user/${router.query.id}/`,
-    apiClient.fetcher,
+    helpers.fetcher,
     {
       fallbackData: reservations,
     },

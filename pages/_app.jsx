@@ -6,6 +6,7 @@ import { CssBaseline, ThemeProvider } from '@mui/material';
 import { LocalizationProvider } from '@mui/lab';
 import { ToastContainer } from 'react-toastify';
 import DateAdapter from '@mui/lab/AdapterDateFns';
+import Script from 'next/script';
 
 import theme from '../styles/theme';
 import Layout from '../components/organisms/Layout';
@@ -27,10 +28,10 @@ const MyApp = ({ Component, pageProps }) => (
       />
       <title>Pet Care App</title>
     </Head>
-    {/* <Script
+    <Script
       type="text/javascript"
-      src={`https://maps.googleapis.com/maps/api/js?key=${process.env.GOOGLE_MAPS_API_KEY}&libraries=places`}
-    /> */}
+      src={`https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}&libraries=places`}
+    />
     <ThemeProvider theme={theme}>
       <LocalizationProvider dateAdapter={DateAdapter}>
         <ErrorBoundary>
@@ -47,7 +48,10 @@ const MyApp = ({ Component, pageProps }) => (
     </ThemeProvider>
   </>
 );
-// eslint-disable-next-line react/forbid-prop-types
-MyApp.propTypes = { Component: PropTypes.node, pageProps: PropTypes.any };
+MyApp.propTypes = {
+  Component: PropTypes.oneOfType([PropTypes.element, PropTypes.func]),
+  // eslint-disable-next-line react/forbid-prop-types
+  pageProps: PropTypes.any,
+};
 
 export default MyApp;

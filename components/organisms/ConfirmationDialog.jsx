@@ -15,7 +15,7 @@ const ConfirmationDialog = ({
   onClickCancel,
   onClickConfirm,
   onClose,
-  open,
+  open = false,
 }) => (
   <Dialog open={open} onClose={onClose}>
     <DialogTitle>{title}</DialogTitle>

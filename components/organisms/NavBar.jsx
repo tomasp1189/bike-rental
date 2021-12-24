@@ -33,9 +33,9 @@ const NavBar = () => {
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
   };
+  const isManager = user?.['http://localhost:3000/roles'].includes('Manager');
 
   const navigationItems = useMemo(() => {
-    const isManager = user?.['http://localhost:3000/roles'].includes('Manager');
     if (!isManager)
       return [
         <Button
@@ -46,14 +46,16 @@ const NavBar = () => {
         >
           Bikes
         </Button>,
-        <Button
-          key="/reservation"
-          color={matches ? 'secondary' : 'primary'}
-          sx={{ my: { xs: 0, md: 2 }, display: 'block' }}
-          onClick={() => router.push('/reservation')}
-        >
-          Reservations
-        </Button>,
+        user && (
+          <Button
+            key="/reservation"
+            color={matches ? 'secondary' : 'primary'}
+            sx={{ my: { xs: 0, md: 2 }, display: 'block' }}
+            onClick={() => router.push('/reservation')}
+          >
+            Reservations
+          </Button>
+        ),
       ];
 
     return [
@@ -74,7 +76,7 @@ const NavBar = () => {
         Bikes
       </Button>,
     ];
-  }, [user]);
+  }, [user, matches, router, isManager]);
 
   return (
     <>
@@ -128,7 +130,9 @@ const NavBar = () => {
             }}
           >
             <PedalBikeIcon sx={{ mr: 2 }} />
-            <Typography variant="h6">Bike Rental</Typography>
+            <Typography variant="h6">
+              {isManager ? 'Admin Panel' : 'Bike Rental'}
+            </Typography>
           </Box>
           <Box sx={{ display: { md: 'flex', xs: 'none' } }}>
             {navigationItems}

@@ -9,14 +9,14 @@ import dbConnect from '../server/lib/dbConnect';
 import Filters from '../components/organisms/Filters';
 import BikeList from '../components/organisms/Bike/BikeList';
 import services from '../server/Bike/services';
-import apiClient from '../api/local';
+import helpers from '../api/helpers';
 
 const Index = ({ bikes = [] }) => {
   const [query, setQuery] = useState('');
 
   const { data, mutate, isValidating } = useSWR(
     `/api/bike/?${query}`,
-    apiClient.fetcher,
+    helpers.fetcher,
     {
       fallbackData: bikes,
       revalidateOnFocus: false,
